@@ -1,0 +1,15 @@
+#!/bin/bash
+# ~z
+
+select pod in $(kubectl get pods -o custom-columns=":metadata.name")
+do
+        echo $pod;
+        if [ "$1" == "describe" ]; then
+                kubectl describe pod $pod;
+        elif [ "$1" == "logs" ]; then
+                kubectl logs $pod -c ${pod:0:-17}-con;
+        else
+                kubectl exec -it $pod bash;
+        fi
+        exit;
+done

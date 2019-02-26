@@ -1,0 +1,9 @@
+#!/bin/bash
+# ~z
+
+select context in 'dev-telhub' 'uat-telhub'
+do
+       echo $context;
+       kubectl config use-context $context;
+       exit;
+done
