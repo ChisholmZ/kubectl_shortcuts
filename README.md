@@ -1,5 +1,7 @@
 # kubectl shortcuts
 
+A few shortcuts for kubectl based on our environment. 
+
 ### pod
 will give a list of pods to select based on your context.
 
