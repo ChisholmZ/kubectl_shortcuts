@@ -2,6 +2,8 @@
 
 A few shortcuts for kubectl based on our environment.
 
+To use place these in `~/bin` or add to your path. 
+
 ### pod
 will give a list of pods to select based on your context.
 
