@@ -12,7 +12,8 @@ do
         elif [ "$1" == "laravel-logs" ]; then
                 kubectl logs $pod -c $1;
         elif [ "$1" == "logs" ]; then
-                kubectl logs $pod -c ${pod:0:-17}-con;
+                con=$(echo $pod | sed -re 's/-[^-]+-[^-]+$/-con/')
+                kubectl logs $pod -c $con;
         else
                 kubectl exec -it $pod bash;
         fi
