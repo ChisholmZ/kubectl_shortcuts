@@ -1,4 +1,14 @@
 #!/bin/bash
 # ~z
 
-kubectl get pods $*
+CONTEXT=$(kubectl config current-context)
+echo "Current Context: $CONTEXT"
+
+if [ "$1" == "k" ]; then
+        kontext
+        kubectl get pods
+elif [ "$1" == "a" ]; then
+        kubectl get pods --all-namespaces
+else
+        kubectl get pods $*
+fi

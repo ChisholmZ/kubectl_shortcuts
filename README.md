@@ -2,7 +2,7 @@
 
 A few shortcuts for kubectl based on our environment.
 
-To use place these in `~/bin` or add to your path. 
+To use place these in `~/bin` or add to your path.
 
 ### pod
 will give a list of pods to select based on your context.
@@ -15,5 +15,16 @@ will give a list of pods to select based on your context.
 
 `pod describe` will describe the pod that you select.
 
+`pod k` will ask to change context before selecting pods.
+
 ### kontext
 will give a list of context to select and set the context base on your choice.
+
+
+### kg
+
+`kg` shortcut for `kubectl get pods`.
+
+`kg a` shortcut for `kubectl get pods --all-namespaces`.
+
+`kg k` will ask to change context, then shortcut for `kubectl get pods`.

@@ -1,0 +1,10 @@
+#!/bin/sh
+#shortcut git status
+#~zach
+
+source telehub.sh
+
+for r in "${REPO[@]}"
+do
+   git clone git@github.com:schneidertech/telematics-hub-${r}.git ${r}
+done

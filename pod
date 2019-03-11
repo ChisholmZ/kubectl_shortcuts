@@ -1,19 +1,24 @@
 #!/bin/bash
 # ~z
 
+
+if [ "$1" == "k" ]; then
+        kontext
+fi
+
 CONTEXT=$(kubectl config current-context)
-echo "Current $CONTEXT"
+echo "Current Context: $CONTEXT"
 
 select pod in $(kubectl get pods -o custom-columns=":metadata.name")
 do
         echo $pod;
         if [ "$1" == "describe" ]; then
                 kubectl describe pod $pod;
-        elif [ "$1" == "laravel-logs" ]; then
-                kubectl logs $pod -c $1;
         elif [ "$1" == "logs" ]; then
                 con=$(echo $pod | sed -re 's/-[^-]+-[^-]+$/-con/')
                 kubectl logs $pod -c $con;
+        elif [ "$1" == "laravel-logs" ]; then
+                kubectl logs $pod -c laravel-logs;
         else
                 kubectl exec -it $pod bash;
         fi
