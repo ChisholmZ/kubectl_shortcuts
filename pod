@@ -19,6 +19,8 @@ do
                 kubectl logs $pod -c $con;
         elif [ "$1" == "laravel-logs" ]; then
                 kubectl logs $pod -c laravel-logs;
+        elif [ "$1" == "cp" ]; then
+                kubectl cp $pod:$2 $3;
         else
                 kubectl exec -it $pod bash;
         fi
