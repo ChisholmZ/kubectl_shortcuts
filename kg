@@ -9,6 +9,8 @@ if [ "$1" == "k" ]; then
         kubectl get pods
 elif [ "$1" == "a" ]; then
         kubectl get pods --all-namespaces
+elif [ "$1" == "s" ]; then
+        kubectl get services
 else
         kubectl get pods $*
 fi
