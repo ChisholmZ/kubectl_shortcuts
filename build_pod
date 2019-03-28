@@ -37,9 +37,6 @@ echo "HELM_DEPLOYMENT_NAME $HELM_DEPLOYMENT_NAME";
 $DOCKER build -f Dockerfile -t ${SERVICE_NAME}:latest .
 $DOCKER tag ${SERVICE_NAME}:latest $DIR:$DOCKER_TAG
 $DOCKER tag ${SERVICE_NAME}:latest $DIR:latest
-# $DOCKER run -d -p $PORT:80 ${DIR}
-# $DOCKER push ${DIR}:$DOCKER_TAG
-# $DOCKER push ${DIR}:latest
 
 kubectl config use-context $CONTEXT
 
