@@ -6,8 +6,8 @@
 DEVOPS=~/telhub/devops
 CHARTS=${DEVOPS}/helm-charts
 # local docker namespace
-DEPLOY_ENV='docker'
+DEPLOY_ENV='local'
 # local docker context
-CONTEXT='docker-for-desktop'
+CONTEXT='local'
 # if windows use the following else remove winpty
 DOCKER='winpty docker'
