@@ -17,12 +17,6 @@ do
    let i++
 done
 
-if [ -z "$1" ]; then
-    PORT=4000
-else
-    PORT=$1
-fi
-
 DOCKER_TAG=$(git log -1 --format=%h)
 DEPLOY_NAMESPACE=${DEPLOY_ENV}
 ECR_REPO_NAME=${DEPLOY_NAMESPACE}-${SERVICE_NAME}
