@@ -1,7 +1,7 @@
 #!/bin/sh
 # ~z
 
-source context.sh
+source ks_config.sh
 
 if [ -z "$1" ]; then
     CREATE_REPLACE="replace"
@@ -10,9 +10,9 @@ else
 fi
 
 if [ $CREATE_REPLACE == 'create' ]; then
-    kubectl create namespace $CONTEXT
-    kubectl config set-context $CONTEXT --user=docker-for-desktop --namespace=$CONTEXT --cluster=docker-for-desktop-cluster
+    kubectl create namespace $NAMESPACE
+    kubectl config set-context $CONTEXT --user=docker-for-desktop --namespace=$NAMESPACE --cluster=docker-for-desktop-cluster
 fi
 
-kubectl $CREATE_REPLACE -f "${DEVOPS}/${DEPLOY_ENV}/secrets/secrets.yaml"
-kubectl $CREATE_REPLACE -f "${DEVOPS}/${DEPLOY_ENV}/configs/config.yaml"
+kubectl $CREATE_REPLACE -f "${DEVOPS}/${NAMESPACE}/secrets/secrets.yaml"
+kubectl $CREATE_REPLACE -f "${DEVOPS}/${NAMESPACE}/configs/config.yaml"
