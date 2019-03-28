@@ -1,7 +1,7 @@
 #!/bin/sh
 # ~z
 
-source config.sh
+source context.sh
 
 if [ -z "$1" ]; then
     CREATE_REPLACE="replace"
@@ -10,6 +10,7 @@ else
 fi
 
 if [ $CREATE_REPLACE == 'create' ]; then
+    kubectl create namespace $CONTEXT
     kubectl config set-context $CONTEXT --user=docker-for-desktop --namespace=$CONTEXT --cluster=docker-for-desktop-cluster
 fi
 

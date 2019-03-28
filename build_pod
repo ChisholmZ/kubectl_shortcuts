@@ -2,7 +2,7 @@
 #build pod on local kube
 #~zach
 
-source config.sh
+source context.sh
 source telhub.sh
 
 FULL=$(pwd)
