@@ -23,7 +23,7 @@ do
                 kubectl cp $pod:$2 $3;
         elif [ "$1" == "root" ]; then
                 ##requires https://github.com/mikelorant/kubectl-exec-user
-                kubectl plugin exec-user $pod
+                kubectl plugin exec-user $pod bash
         else
                 kubectl exec -it $pod bash;
         fi
