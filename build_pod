@@ -1,0 +1,17 @@
+#!/bin/bash
+#shortcut to docker
+#~zach
+
+FULL=$(pwd)
+DIR=$(basename "$FULL")
+CHARTS=~/telhub/devops/helm-charts
+
+select chart in $(ls $CHARTS)
+do
+    echo "${CHARTS}/${chart} ${DIR}"
+    # kubectl apply -f ${CHARTS}/${chart}/templates/deployment.yaml
+
+    helm upgrade --namespace docker ${DIR} ${CHARTS}/${chart} --recreate-pods
+
+    exit;
+done
