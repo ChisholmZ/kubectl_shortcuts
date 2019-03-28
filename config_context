@@ -1,0 +1,17 @@
+#!/bin/sh
+# ~z
+
+source config.sh
+
+if [ -z "$1" ]; then
+    CREATE_REPLACE="replace"
+else
+    CREATE_REPLACE=$1
+fi
+
+if [ $CREATE_REPLACE == 'create' ]; then
+    kubectl config set-context $CONTEXT --user=docker-for-desktop --namespace=$CONTEXT --cluster=docker-for-desktop-cluster
+fi
+
+kubectl $CREATE_REPLACE -f "${DEVOPS}/${DEPLOY_ENV}/secrets/secrets.yaml"
+kubectl $CREATE_REPLACE -f "${DEVOPS}/${DEPLOY_ENV}/configs/config.yaml"

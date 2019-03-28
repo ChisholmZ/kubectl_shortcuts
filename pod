@@ -9,7 +9,7 @@ fi
 CONTEXT=$(kubectl config current-context)
 echo "Current Context: $CONTEXT"
 
-select pod in $(kubectl get pods -o custom-columns=":metadata.name")
+select pod in $(kubectl get pods -o custom-columns=":metadata.name") 
 do
         echo $pod;
         if [ "$1" == "describe" ]; then
