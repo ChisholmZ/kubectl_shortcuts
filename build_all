@@ -6,9 +6,12 @@ source ks_config.sh
 source telhub.sh
 
 i=0
-for R in "${REPO[@]}"
+for S in "${SERVICE[@]}"
 do
+    $R="${REPO[$i]}"
     cd ${MAIN_DIR}/${R}
-    build_pod $R "${SERVICE[$i]}"
+    git checkout development
+    git pull
+    build_pod $R $S
     let i++
 done
