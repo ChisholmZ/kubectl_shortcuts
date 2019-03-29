@@ -5,17 +5,25 @@
 source ks_config.sh
 source telhub.sh
 
-FULL=$(pwd)
-DIR=$(basename "$FULL")
-i=0
+if [ ! -z "$1" ]; then
+    DIR=$1
+else#
+    FULL=$(pwd)
+    DIR=$(basename "$FULL")
+fi
 
-for R in "${REPO[@]}"
-do
-   if [ $R == $DIR ]; then
-       SERVICE_NAME="${SERVICE[$i]}"
-   fi
-   let i++
-done
+if [ ! -z "$2" ]; then
+    SERVICE_NAME=$2
+else
+    i=0
+    for R in "${REPO[@]}"
+    do
+       if [ $R == $DIR ]; then
+           SERVICE_NAME="${SERVICE[$i]}"
+       fi
+       let i++
+    done
+fi
 
 DOCKER_TAG=$(git log -1 --format=%h)
 HELM_DEPLOYMENT_NAME=${NAMESPACE}-${SERVICE_NAME}
