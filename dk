@@ -19,22 +19,20 @@ elif [ "$1" == 'r' ] || [ "$1" == 'run' ]; then
     $DOCKER run -d -p $PORT:80 ${DIR}
 elif [ "$1" == 'l' ] || [ "$1" == 'logs' ]; then
     $DOCKER logs ${DIR}
-elif [ "$1" == 'push' ]; then
-    $DOCKER push ${DIR}
 elif [ "$1" == 'b' ]; then
-    CON=$($DOCKER ps -aqf "ancestor=${DIR}" -n 1)
-    $DOCKER exec -it ${CON} /bin/bash
+    CON=$(docker ps -aqf "ancestor=${DIR}" -n 1)
+    $DOCKER exec -it ${CON} //bin/bash
 elif [ "$1" == 'root' ]; then
-    CON=$($DOCKER ps -aqf "ancestor=${DIR}" -n 1)
-    $DOCKER exec -it --user root ${CON} /bin/bash
+    CON=$(docker ps -aqf "ancestor=${DIR}" -n 1)
+    $DOCKER exec -it --user root ${CON} //bin/bash
 elif [ "$1" == 'p' ] || [ "$1" == 'prune' ]; then
-    $DOCKER system prune -f -a
+    docker system prune -f -a
 elif [ "$1" == 'ls' ]; then
-    $DOCKER container ls -a
+    docker container ls -a
 elif [ "$1" == 'i' ]; then
-    $DOCKER ps -aqf "ancestor=${DIR}" -n 1
+    docker ps -aqf "ancestor=${DIR}" -n 1
 elif [ "$1" == 'kill' ]; then
-    $DOCKER kill $($DOCKER ps -q)
+    docker kill $(docker ps -q)
 elif [ "$1" == 'rmi' ]; then
-    $DOCKER rmi -f $($DOCKER images -q)
+    docker rmi -f $(docker images -q)
 fi
