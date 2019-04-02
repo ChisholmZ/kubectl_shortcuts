@@ -25,6 +25,11 @@ else
     done
 fi
 
+if [ -f .env ]; then
+    echo 'env found'
+    sudo rm -f .env
+fi
+
 DOCKER_TAG=$(git log -1 --format=%h)
 HELM_DEPLOYMENT_NAME=${NAMESPACE}-${SERVICE_NAME}
 
@@ -34,7 +39,7 @@ echo "SERVICE_NAME $SERVICE_NAME";
 echo "NAMESPACE $NAMESPACE";
 echo "HELM_DEPLOYMENT_NAME $HELM_DEPLOYMENT_NAME";
 
-$DOCKER build -f Dockerfile -t ${SERVICE_NAME}:latest .
+$DOCKER build -f Dockerfile --tag=$DIR -t ${SERVICE_NAME}:latest .
 $DOCKER tag ${SERVICE_NAME}:latest $DIR:$DOCKER_TAG
 $DOCKER tag ${SERVICE_NAME}:latest $DIR:latest
 

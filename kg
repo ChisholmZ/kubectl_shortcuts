@@ -11,6 +11,13 @@ elif [ "$1" == "a" ]; then
         kubectl get pods --all-namespaces
 elif [ "$1" == "s" ]; then
         kubectl get services
+elif [ "$1" == "d" ]; then
+        kubectl get deployments -o custom-columns=":metadata.name"
+elif [ "$1" == "dall" ]; then
+    for N in $(kubectl get deployments -o custom-columns=":metadata.name")
+    do
+        kubectl delete deployment $N
+    done
 else
         kubectl get pods $*
 fi
