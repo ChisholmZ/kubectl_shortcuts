@@ -6,5 +6,9 @@ source telhub.sh
 
 for r in "${REPO[@]}"
 do
-   git clone git@github.com:schneidertech/telematics-hub-${r}.git ${r}
+    if [ $r == 'alpine-sqs' ]; then
+        git clone https://github.com/roribio/alpine-sqs.git
+    else
+        git clone git@github.com:schneidertech/telematics-hub-${r}.git ${r}
+    fi
 done

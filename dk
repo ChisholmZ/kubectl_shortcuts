@@ -38,7 +38,7 @@ elif [ "$1" == 'p' ] || [ "$1" == 'prune' ]; then
 elif [ "$1" == 'ls' ]; then
     docker container ls -a
 elif [ "$1" == 'i' ]; then
-    docker ps -a "ancestor=${DIR}"
+    docker ps -af "ancestor=${DIR}"
 elif [ "$1" == 'kill' ]; then
     docker kill $(docker ps -aqf "ancestor=${DIR}")
 elif [ "$1" == 'killall' ]; then

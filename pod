@@ -17,6 +17,8 @@ do
         elif [ "$1" == "logs" ]; then
                 con=$(echo $pod | sed -re 's/-[^-]+-[^-]+$/-con/')
                 kubectl logs $pod -c $con;
+        elif [ "$1" == "log" ]; then
+                kubectl logs -p  $pod  
         elif [ "$1" == "laravel-logs" ]; then
                 kubectl logs $pod -c laravel-logs;
         elif [ "$1" == "cp" ]; then
