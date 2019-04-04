@@ -1,0 +1,13 @@
+#!/bin/sh
+# config
+#~zach
+
+#path to helm charts
+DEVOPS=~/telhub/devops
+CHARTS=${DEVOPS}/helm-charts
+# local docker namespace
+NAMESPACE='local'
+# local docker context
+CONTEXT='local'
+# if windows use the following else remove winpty
+DOCKER='winpty docker'

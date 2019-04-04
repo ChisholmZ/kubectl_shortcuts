@@ -1,7 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 # ~z
 
-select context in 'dev-telhub' 'uat-telhub' 'prd-telhub'
+source ks_config.sh
+
+select context in 'dev-telhub' 'uat-telhub' 'prf-telhub' 'prd-telhub' "$CONTEXT"
 do
        echo $context;
        kubectl config use-context $context;

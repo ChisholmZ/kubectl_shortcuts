@@ -1,0 +1,18 @@
+#!/bin/sh
+#shortcut git status
+#~zach
+
+source ks_config.sh
+source telhub.sh
+
+i=0
+for S in "${SERVICE[@]}"
+do
+    R="${REPO[$i]}"
+    echo "$R $S"
+    cd ${MAIN_DIR}/${R}
+    git checkout development
+    git pull
+    build_pod $R $S
+    let i++
+done

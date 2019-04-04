@@ -1,0 +1,61 @@
+#!/bin/sh
+#build pod on local kube
+#~zach
+
+source ks_config.sh
+source telhub.sh
+
+if [ ! -z "$1" ]; then
+    DIR=$1
+else
+    FULL=$(pwd)
+    DIR=$(basename "$FULL")
+fi
+
+if [ ! -z "$2" ]; then
+    SERVICE_NAME=$2
+else
+    i=0
+    for R in "${REPO[@]}"
+    do
+       if [ $R == $DIR ]; then
+           SERVICE_NAME="${SERVICE[$i]}"
+       fi
+       let i++
+    done
+fi
+
+if [ -f .env ]; then
+    echo 'env found'
+    rm -f .env
+fi
+
+if [ -f pom.xml ]; then
+    echo 'java found'
+    # mvn -B -f pom.xml clean install -DskipTests=true
+fi
+
+DOCKER_TAG=$(git log -1 --format=%h)
+HELM_DEPLOYMENT_NAME=${NAMESPACE}-${SERVICE_NAME}
+
+echo "DOCKER_TAG $DOCKER_TAG";
+echo "NAMESPACE $NAMESPACE";
+echo "SERVICE_NAME $SERVICE_NAME";
+echo "NAMESPACE $NAMESPACE";
+echo "HELM_DEPLOYMENT_NAME $HELM_DEPLOYMENT_NAME";
+
+$DOCKER build -f Dockerfile -t ${SERVICE_NAME}:latest .
+$DOCKER tag ${SERVICE_NAME}:latest $DIR:$DOCKER_TAG
+$DOCKER tag ${SERVICE_NAME}:latest $DIR:latest
+
+kubectl config use-context $CONTEXT
+
+RELEASE_NAME_LISTING=$(helm ls ${HELM_DEPLOYMENT_NAME} --namespace ${NAMESPACE} --deployed)
+
+## Check if Helm is installed otherwise upgrade
+if [[ $RELEASE_NAME_LISTING == *"${HELM_DEPLOYMENT_NAME}"*"${NAMESPACE}"* ]]
+then
+	helm upgrade --namespace ${NAMESPACE} ${HELM_DEPLOYMENT_NAME} "${CHARTS}/${SERVICE_NAME}"  --set image.repository=${DIR} --set-string image.tag=$DOCKER_TAG  --recreate-pods
+else
+	helm install --namespace ${NAMESPACE} "${CHARTS}/${SERVICE_NAME}" --name=${HELM_DEPLOYMENT_NAME} --set image.repository=${DIR} --set-string image.tag=$DOCKER_TAG
+fi

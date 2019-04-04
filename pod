@@ -13,18 +13,23 @@ select pod in $(kubectl get pods -o custom-columns=":metadata.name")
 do
         echo $pod;
         name=$(echo $pod | sed -re 's/-[^-]+-[^-]+$//')
-        
+
         if [ "$1" == "describe" ]; then
                 kubectl describe pod $pod;
         elif [ "$1" == "logs" ]; then
                 con=$(echo $pod | sed -re 's/-[^-]+-[^-]+$/-con/')
                 kubectl logs $pod -c $con;
+        elif [ "$1" == "log" ]; then
+                kubectl logs -p  $pod
         elif [ "$1" == "laravel-logs" ]; then
                 kubectl logs $pod -c laravel-logs;
         elif [ "$1" == "cp" ]; then
                 kubectl cp $pod:$2 $3;
         elif [ "$1" == "scale" ]; then
                 kubectl scale --replicas=$2 deployment/$name
+        elif [ "$1" == "root" ]; then
+                ##requires https://github.com/mikelorant/kubectl-exec-user
+                kubectl plugin exec-user -u 0 $pod bash
         else
                 kubectl exec -it $pod bash;
         fi
