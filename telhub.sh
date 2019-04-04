@@ -2,8 +2,7 @@
 # telehub repo list
 #~zach
 
-
-REPO[0]='router'
+REPO[0]='common-package'
 REPO[1]='inbound-api'
 REPO[2]='migrations'
 REPO[3]='rods-adapter'
@@ -23,9 +22,11 @@ REPO[16]='ps-pay-adapter'
 REPO[17]='rabbit'
 REPO[18]='telhub-db'
 REPO[19]='alpine-sqs'
-REPO[20]='common-package'
+REPO[20]='orion-equipment-adapter'
+REPO[21]='orion-driver-adapter'
+REPO[22]='orion-driver-parameter-group-adapter'
+REPO[23]='router'
 
-SERVICE[0]='messages-router'
 SERVICE[1]='inbound-messages-api'
 SERVICE[2]='migrations'
 SERVICE[3]='rods-ps-adapter'
@@ -45,3 +46,7 @@ SERVICE[16]='pay-file-adapter'
 SERVICE[17]='rabbit'
 SERVICE[18]='telhub-db'
 SERVICE[19]='alpine-sqs'
+SERVICE[20]='orion-equipment-adapter'
+SERVICE[21]='orion-driver-adapter'
+SERVICE[22]='orion-driver-parameter-group-adapter'
+SERVICE[23]='messages-router'

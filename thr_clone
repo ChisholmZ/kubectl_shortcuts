@@ -4,11 +4,23 @@
 
 source telhub.sh
 
-for r in "${REPO[@]}"
-do
-    if [ $r == 'alpine-sqs' ]; then
+clone_repo(){
+    if [ $1 == 'alpine-sqs' ]; then
         git clone https://github.com/roribio/alpine-sqs.git
     else
-        git clone git@github.com:schneidertech/telematics-hub-${r}.git ${r}
+        git clone git@github.com:schneidertech/telematics-hub-${1}.git ${1}
     fi
-done
+}
+
+if [ "$1" == "all" ]; then
+    for r in "${REPO[@]}"
+    do
+        clone_repo $r
+    done
+else
+    select r in "${REPO[@]}"
+    do
+        clone_repo $r
+        exit
+    done
+fi
