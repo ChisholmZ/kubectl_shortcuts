@@ -56,7 +56,7 @@ RELEASE_NAME_LISTING=$(helm ls ${HELM_DEPLOYMENT_NAME} --namespace ${NAMESPACE} 
 ## Check if Helm is installed otherwise upgrade
 if [[ $RELEASE_NAME_LISTING == *"${HELM_DEPLOYMENT_NAME}"*"${NAMESPACE}"* ]]
 then
-	helm upgrade --namespace ${NAMESPACE} ${HELM_DEPLOYMENT_NAME} "${CHARTS}/${SERVICE_NAME}"  --set image.repository=${DIR} --set-string image.tag=$DOCKER_TAG  --set localPath=$LOCAL_PATH --recreate-pods
+	helm upgrade --namespace ${NAMESPACE} ${HELM_DEPLOYMENT_NAME} "${CHARTS}/${SERVICE_NAME}"  --set image.repository=${DIR},image.tag=${DOCKER_TAG},image.pullPolicy=IfNotPresent,localPath=${LOCAL_PATH} --recreate-pods
 else
-	helm install --namespace ${NAMESPACE} "${CHARTS}/${SERVICE_NAME}" --name=${HELM_DEPLOYMENT_NAME} --set image.repository=${DIR} --set-string image.tag=$DOCKER_TAG --set localPath=$LOCAL_PATH
+	helm install --namespace ${NAMESPACE} "${CHARTS}/${SERVICE_NAME}" --name=${HELM_DEPLOYMENT_NAME} --set image.repository=${DIR},image.tag=${DOCKER_TAG},image.pullPolicy=IfNotPresent,localPath=${LOCAL_PATH}
 fi
