@@ -6,6 +6,7 @@ source ks_config.sh
 
 FULL=$(pwd)
 DIR=$(basename "$FULL")
+CON=$(docker ps -aqf "ancestor=${DIR}" -n 1)
 
 if [ -z "$2" ]; then
     PORT=4000
@@ -24,14 +25,12 @@ if [ "$1" == 'build' ]; then
 elif [ "$1" == 'r' ] || [ "$1" == 'run' ]; then
     $DOCKER run -d -p $PORT:80 ${DIR}
 elif [ "$1" == 'l' ] || [ "$1" == 'logs' ]; then
-    $DOCKER logs ${DIR}
+    $DOCKER logs ${CON}
 elif [ "$1" == 'pull' ]; then
     docker pull ${DIR}:latest
 elif [ "$1" == 'b' ]; then
-    CON=$(docker ps -aqf "ancestor=${DIR}" -n 1)
     $DOCKER exec -it ${CON} //bin/bash
 elif [ "$1" == 'root' ]; then
-    CON=$(docker ps -aqf "ancestor=${DIR}" -n 1)
     $DOCKER exec -it --user root ${CON} //bin/bash
 elif [ "$1" == 'p' ] || [ "$1" == 'prune' ]; then
     docker system prune -f -a
