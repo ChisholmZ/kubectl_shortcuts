@@ -2,7 +2,18 @@
 #shortcut git status
 #~zach
 
+if [ ! -f ks_config.sh ]; then
+    cp ks_config.sh.sample ks_config.sh
+fi
+
+source ks_config.sh
 source telhub.sh
+
+if [ ! -d $MAIN_DIR ]; then
+    mkdir $MAIN_DIR
+fi
+
+cd $MAIN_DIR
 
 clone_repo(){
     if [ $1 == 'alpine-sqs' ]; then

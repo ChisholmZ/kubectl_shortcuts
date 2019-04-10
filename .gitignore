@@ -1,1 +1,4 @@
 ks_config.sh
+/telhub/*
+!/telhub/rabbit
+!/telhub/telhub-db
