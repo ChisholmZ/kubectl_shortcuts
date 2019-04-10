@@ -4,13 +4,12 @@
 
 BASH_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
 
-
 if [ ! -f ${BASH_DIR}/ks_config.sh ]; then
     cp ${BASH_DIR}/ks_config.sh.sample ${BASH_DIR}/ks_config.sh
 fi
 
-source ks_config.sh
-source telhub.sh
+source $BASH_DIR/ks_config.sh
+source $BASH_DIR/telhub.sh
 
 if [ ! -d $MAIN_DIR ]; then
     mkdir $MAIN_DIR
@@ -20,7 +19,7 @@ cd $MAIN_DIR
 
 clone_repo(){
     if [ $1 == 'alpine-sqs' ]; then
-        git clone https://github.com/roribio/alpine-sqs.git
+        git clone git@github.com:roribio/alpine-sqs.git
     else
         git clone git@github.com:schneidertech/telematics-hub-${1}.git ${1}
     fi
