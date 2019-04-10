@@ -2,8 +2,8 @@
 #shortcut git status
 #~zach
 
-if [ ! -f ks_config.sh ]; then
-    cp ks_config.sh.sample ks_config.sh
+if [ ! -f ${BASH_SOURCE[0]}/ks_config.sh ]; then
+    cp ${BASH_SOURCE[0]}/ks_config.sh.sample ${BASH_SOURCE[0]}/ks_config.sh
 fi
 
 source ks_config.sh
