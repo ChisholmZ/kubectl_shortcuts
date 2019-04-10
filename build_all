@@ -13,6 +13,6 @@ do
     cd ${MAIN_DIR}/${R}
     git checkout development
     git pull
-    build_pod $R $S
+    build_pod --dir=$R --service-name=$S
     let i++
 done

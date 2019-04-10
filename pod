@@ -25,6 +25,8 @@ do
                 kubectl logs $pod -c laravel-logs;
         elif [ "$1" == "cp" ]; then
                 kubectl cp $pod:$2 $3;
+        elif [ "$1" == "cpin" ]; then
+                kubectl cp $2 $pod:$3;
         elif [ "$1" == "scale" ]; then
                 kubectl scale --replicas=$2 deployment/$name
         elif [ "$1" == "root" ]; then

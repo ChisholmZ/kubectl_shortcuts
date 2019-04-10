@@ -20,16 +20,40 @@ funcHandleReturnCode() {
 }
 
 LOCAL_PATH=$(pwd)
+MAIN_DIR=$LOCAL_PATH
+PULL_POLICY='IfNotPresent'
 
-if [ ! -z "$1" ] && [ "$1" != "skip" ]; then
-    DIR=$1
-else
-    DIR=$(basename "$LOCAL_PATH")
+while [ $# -ne 0 ]
+do
+    arg="${1:2}"
+    case "${arg}" in
+        skip-java)
+            NO_JAVA=true;
+            ;;
+        clean-java)
+            CLEAN_JAVA=true;
+            ;;
+        service-name=*)
+            SERVICE_NAME="${arg:13}";
+            ;;
+        dir=*)
+            DIR="${arg:4}";
+            ;;
+        local-path=*)
+            LOCAL_PATH="${arg:11}";
+            ;;
+        pull-policy=*)
+            PULL_POLICY="${arg:12}";
+            ;;
+    esac
+    shift
+done
+
+if [ -z "$DIR" ]; then
+    DIR=$(basename "$MAIN_DIR")
 fi
 
-if [ ! -z "$2" ]; then
-    SERVICE_NAME=$2
-else
+if [ -z "$SERVICE_NAME" ]; then
     i=0
     for R in "${REPO[@]}"
     do
@@ -40,18 +64,26 @@ else
     done
 fi
 
-if [ -f .env ]; then
-    echo 'env found'
-    rm -f .env
+if [ -f pom.xml ] && [ ! -z "$CLEAN_JAVA" ]; then
+    mvn clean
 fi
 
-if [ -f pom.xml ] && [ "$1" != "skip" ]; then
+if [ -f pom.xml ] && [ -z "$NO_JAVA" ]; then
     echo 'java found'
-    # mvn -B -f pom.xml clean install -DskipTests=true
+    mvn -B -f pom.xml clean install -DskipTests=true
+    funcHandleReturnCode $? "build maven"
+fi
+
+# Remove previous Docker images just in case children dependencies exist on running container
+RMI=$(docker images -f dangling=true -q --no-trunc)
+if [ ! -z "$RMI" ]; then
+    echo "Remove local Docker image"
+    docker rmi -f $RMI
 fi
 
 DOCKER_TAG=$(git log -1 --format=%h)
 HELM_DEPLOYMENT_NAME=${NAMESPACE}-${SERVICE_NAME}
+TIMESTAMP=$(date +%s)
 
 echo "DOCKER_TAG $DOCKER_TAG";
 echo "NAMESPACE $NAMESPACE";
@@ -59,12 +91,12 @@ echo "SERVICE_NAME $SERVICE_NAME";
 echo "NAMESPACE $NAMESPACE";
 echo "HELM_DEPLOYMENT_NAME $HELM_DEPLOYMENT_NAME";
 
-$DOCKER build --tag=${SERVICE_NAME}:latest .
+$DOCKER build -t ${DIR}:latest .
 funcHandleReturnCode $? "Build Docker image"
 
-$DOCKER tag ${SERVICE_NAME}:latest $DIR:latest
-$DOCKER tag ${SERVICE_NAME}:latest $DIR:$DOCKER_TAG
-$DOCKER tag ${SERVICE_NAME}:latest $SERVICE_NAME:$DOCKER_TAG
+$DOCKER tag ${DIR}:latest $SERVICE_NAME:latest
+$DOCKER tag ${DIR}:latest $DIR:$DOCKER_TAG
+$DOCKER tag ${DIR}:latest $SERVICE_NAME:$DOCKER_TAG
 funcHandleReturnCode $? "Tag Docker image"
 
 kubectl config use-context $CONTEXT
@@ -74,9 +106,9 @@ RELEASE_NAME_LISTING=$(helm ls ${HELM_DEPLOYMENT_NAME} --namespace ${NAMESPACE} 
 ## Check if Helm is installed otherwise upgrade
 if [[ $RELEASE_NAME_LISTING == *"${HELM_DEPLOYMENT_NAME}"*"${NAMESPACE}"* ]]
 then
-	helm upgrade --namespace ${NAMESPACE} ${HELM_DEPLOYMENT_NAME} "${CHARTS}/${SERVICE_NAME}"  --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=IfNotPresent,localPath=${LOCAL_PATH} --recreate-pods
+	helm upgrade --namespace ${NAMESPACE} ${HELM_DEPLOYMENT_NAME} "${CHARTS}/${SERVICE_NAME}"  --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH} --recreate-pods
 else
-	helm install --namespace ${NAMESPACE} "${CHARTS}/${SERVICE_NAME}" --name=${HELM_DEPLOYMENT_NAME} --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=IfNotPresent,localPath=${LOCAL_PATH}
+	helm install --namespace ${NAMESPACE} "${CHARTS}/${SERVICE_NAME}" --name=${HELM_DEPLOYMENT_NAME} --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH}
 fi
 
 funcHandleReturnCode $? "Helm"
