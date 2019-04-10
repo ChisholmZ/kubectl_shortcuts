@@ -3,7 +3,8 @@
 #~zach
 
 #path to helm charts
-MAIN_DIR=${BASH_SOURCE[0]}/telhub
+BASH_DIR=$(dirname ${BASH_SOURCE[0]})
+MAIN_DIR=${BASH_DIR}/telhub
 DEVOPS=${MAIN_DIR}/devops
 CHARTS=${DEVOPS}/helm-charts
 # local docker namespace
