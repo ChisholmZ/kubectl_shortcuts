@@ -6,7 +6,7 @@ BASH_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
 
 if [ ! -f ${BASH_DIR}/ks_config.sh ]; then
     cp ${BASH_DIR}/ks_config.sh.sample ${BASH_DIR}/ks_config.sh
-    echo PATH=$PATH:${BASH_DIR} >> ~/.profile
+    echo PATH=\$PATH:${BASH_DIR} >> ~/.profile
     source ~/.profile
 fi
 
