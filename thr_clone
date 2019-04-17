@@ -30,7 +30,9 @@ clone_repo(){
 if [ "$1" == "all" ]; then
     for r in "${REPO[@]}"
     do
-        clone_repo $r
+        if [ ! -d $r ]; then
+            clone_repo $r
+        fi
     done
 else
     select r in "${REPO[@]}"

@@ -1,0 +1,34 @@
+#!/bin/sh
+#shortcut git status
+#~zach
+
+BASH_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
+
+source $BASH_DIR/ks_config.sh
+source $BASH_DIR/telhub.sh
+
+if [ ! -d $MAIN_DIR ]; then
+    mkdir $MAIN_DIR
+fi
+
+cd $CHARTS
+
+helm_chart(){
+    if [ ! -d $1 ]; then
+        cp -r heartbeat-ps-adapter $1
+        sed -i "s/heartbeat-ps-adapter/$1/g" $1/values.yaml
+    fi
+}
+
+if [ "$1" == "all" ]; then
+    for s in "${SERVICE[@]}"
+    do
+        helm_chart $s
+    done
+else
+    select s in "${SERVICE[@]}"
+    do
+        helm_chart $s
+        exit
+    done
+fi
