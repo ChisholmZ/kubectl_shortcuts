@@ -14,9 +14,16 @@ fi
 cd $CHARTS
 
 helm_chart(){
+    # if [ -f $1/values.yaml ]; then
+    #     for file in $(ls $1/templates)
+    #     do
+    #         sed -i "s/$1/{{ .Values.serviceName }}/g" $1/templates/$file
+    #     done
+    # fi
     if [ ! -d $1 ]; then
         cp -r heartbeat-ps-adapter $1
         sed -i "s/heartbeat-ps-adapter/$1/g" $1/values.yaml
+        sed -i "s/heartbeat-ps-adapter/$1/g" $1/Chart.yaml
     fi
 }
 
