@@ -3,6 +3,7 @@
 #~zach
 
 source ks_config.sh
+source telhub.sh
 
 FULL=$(pwd)
 DIR=$(basename "$FULL")
@@ -19,6 +20,15 @@ if [ -z "$3" ]; then
 else
     PORT=$3
 fi
+
+i=0
+for R in "${REPO[@]}"
+do
+    if [ $DIR == $R ]; then
+        APP_NAME="${SERVICE[$i]}"
+    fi
+    let i++
+done
 
 if [ "$1" == 'build' ]; then
     $DOCKER build --tag=${DIR} .

@@ -5,6 +5,10 @@
 source ks_config.sh
 source telhub.sh
 
+git config core.fileMode false
+dos2unix Dockerfile
+dos2unix *.sh
+
 funcHandleReturnCode() {
 
   returnCode=$1
@@ -27,6 +31,9 @@ while [ $# -ne 0 ]
 do
     arg="${1:2}"
     case "${arg}" in
+        skip-build)
+            NO_BUILD=true;
+            ;;
         skip-java)
             NO_JAVA=true;
             ;;
@@ -76,7 +83,7 @@ fi
 
 # Remove previous Docker images just in case children dependencies exist on running container
 RMI=$(docker images -f dangling=true -q --no-trunc)
-if [ ! -z "$RMI" ]; then
+if [ ! -z "$RMI" ] && [ -z "$NO_BUILD" ]; then
     echo "Remove local Docker image"
     docker rmi -f $RMI
 fi
@@ -91,24 +98,33 @@ echo "SERVICE_NAME $SERVICE_NAME";
 echo "NAMESPACE $NAMESPACE";
 echo "HELM_DEPLOYMENT_NAME $HELM_DEPLOYMENT_NAME";
 
-$DOCKER build -t ${DIR}:latest .
-funcHandleReturnCode $? "Build Docker image"
+if [ -z "$NO_BUILD" ]; then
+    $DOCKER build -t ${DIR}:latest .
+    funcHandleReturnCode $? "Build Docker image"
 
-$DOCKER tag ${DIR}:latest $SERVICE_NAME:latest
-$DOCKER tag ${DIR}:latest $DIR:$DOCKER_TAG
-$DOCKER tag ${DIR}:latest $SERVICE_NAME:$DOCKER_TAG
-funcHandleReturnCode $? "Tag Docker image"
+    $DOCKER tag ${DIR}:latest $SERVICE_NAME:latest
+    $DOCKER tag ${DIR}:latest $DIR:$DOCKER_TAG
+    $DOCKER tag ${DIR}:latest $SERVICE_NAME:$DOCKER_TAG
+    funcHandleReturnCode $? "Tag Docker image"
+fi
 
 kubectl config use-context $CONTEXT
+
+# kubectl autoscale deployment $SERVICE_NAME --cpu-percent=50 --min=1 --max=10
+# funcHandleReturnCode $? "autoscale $SERVICE_NAME"
 
 RELEASE_NAME_LISTING=$(helm ls ${HELM_DEPLOYMENT_NAME} --namespace ${NAMESPACE} --deployed)
 
 ## Check if Helm is installed otherwise upgrade
 if [[ $RELEASE_NAME_LISTING == *"${HELM_DEPLOYMENT_NAME}"*"${NAMESPACE}"* ]]
 then
-	helm upgrade --namespace ${NAMESPACE} ${HELM_DEPLOYMENT_NAME} "${CHARTS}/${SERVICE_NAME}"  --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH} --recreate-pods
+	helm upgrade --namespace ${NAMESPACE} ${HELM_DEPLOYMENT_NAME} "${CHARTS}/${SERVICE_NAME}" \
+    --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH} \
+    --recreate-pods
 else
-	helm install --namespace ${NAMESPACE} "${CHARTS}/${SERVICE_NAME}" --name=${HELM_DEPLOYMENT_NAME} --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH}
+	helm install --namespace ${NAMESPACE} "${CHARTS}/${SERVICE_NAME}" \
+    --name=${HELM_DEPLOYMENT_NAME} \
+    --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH}
 fi
 
 funcHandleReturnCode $? "Helm"
