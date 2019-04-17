@@ -11,6 +11,10 @@ elif [ "$1" == "a" ]; then
         kubectl get pods --all-namespaces
 elif [ "$1" == "s" ]; then
         kubectl get services
+elif [ "$1" == "h" ]; then
+        kubectl get hpa
+elif [ "$1" == "dh" ]; then
+        kubectl describe hpa
 elif [ "$1" == "d" ]; then
         kubectl get deployments -o custom-columns=":metadata.name"
 elif [ "$1" == "dall" ]; then

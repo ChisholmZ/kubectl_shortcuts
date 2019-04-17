@@ -6,11 +6,15 @@ if [ "$1" == "k" ]; then
         kontext
 fi
 
-if [ "$1" == "scale" ]; then
-    PODS=$(kubectl get deployments -o custom-columns=":metadata.name")
-else
-    PODS=$(kubectl get pods -o custom-columns=":metadata.name")
-fi
+case "$1" in
+    scale) hpa)
+        PODS=$(kubectl get deployments -o custom-columns=":metadata.name")
+        ;;
+    *)
+        PODS=$(kubectl get pods -o custom-columns=":metadata.name")
+        ;;
+esac
+
 
 CONTEXT=$(kubectl config current-context)
 echo "Current Context: $CONTEXT"
@@ -33,6 +37,8 @@ do
                 kubectl cp $pod:$2 $3;
         elif [ "$1" == "scale" ]; then
                 kubectl scale --replicas=$2 deployment/$pod
+        elif [ "$1" == "dh" ]; then
+                kubectl describe hpa $pod
         elif [ "$1" == "root" ]; then
                 ##requires https://github.com/mikelorant/kubectl-exec-user
                 kubectl plugin exec-user -u 0 $pod bash
