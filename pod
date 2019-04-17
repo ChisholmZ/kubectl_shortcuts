@@ -7,7 +7,7 @@ if [ "$1" == "k" ]; then
 fi
 
 case "$1" in
-    scale) hpa)
+    scale|hpa)
         PODS=$(kubectl get deployments -o custom-columns=":metadata.name")
         ;;
     *)
