@@ -1,0 +1,44 @@
+#!/bin/sh
+#shortcut git status
+#~zach
+
+BASH_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
+
+source $BASH_DIR/ks_config.sh
+source $BASH_DIR/telhub.sh
+
+if [ ! -d $MAIN_DIR ]; then
+    mkdir $MAIN_DIR
+fi
+
+if [ ! -z "$2" ]; then
+    BRANCH=$2
+else
+    BRANCH="development"
+fi
+
+func_dev(){
+    cd $MAIN_DIR/$1
+    echo $1
+    git checkout $BRANCH
+}
+
+if [ "$1" == "all" ]; then
+    for r in "${REPO[@]}"
+    do
+        func_dev $r
+    done
+elif [ ! -z "$1" ]; then
+    for r in "${REPO[@]}"
+    do
+        if [[ $r =~ $1 ]]; then
+            func_dev $r
+        fi
+    done
+else
+    select r in "${REPO[@]}"
+    do
+        func_dev $r
+        exit
+    done
+fi
