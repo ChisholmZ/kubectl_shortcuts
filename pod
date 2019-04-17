@@ -6,10 +6,16 @@ if [ "$1" == "k" ]; then
         kontext
 fi
 
+if [ "$1" == "scale" ]; then
+    PODS=$(kubectl get deployments -o custom-columns=":metadata.name")
+else
+    PODS=$(kubectl get pods -o custom-columns=":metadata.name")
+fi
+
 CONTEXT=$(kubectl config current-context)
 echo "Current Context: $CONTEXT"
 
-select pod in $(kubectl get pods -o custom-columns=":metadata.name")
+select pod in $PODS
 do
         echo $pod;
         name=$(echo $pod | sed -re 's/-[^-]+-[^-]+$//')
@@ -25,10 +31,8 @@ do
                 kubectl logs $pod -c laravel-logs;
         elif [ "$1" == "cp" ]; then
                 kubectl cp $pod:$2 $3;
-        elif [ "$1" == "cpin" ]; then
-                kubectl cp $2 $pod:$3;
         elif [ "$1" == "scale" ]; then
-                kubectl scale --replicas=$2 deployment/$name
+                kubectl scale --replicas=$2 deployment/$pod
         elif [ "$1" == "root" ]; then
                 ##requires https://github.com/mikelorant/kubectl-exec-user
                 kubectl plugin exec-user -u 0 $pod bash
