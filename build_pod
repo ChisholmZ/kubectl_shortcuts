@@ -37,6 +37,9 @@ do
         skip-java)
             NO_JAVA=true;
             ;;
+        skip-composer)
+            NO_COMPOSER=true;
+            ;;
         clean-java)
             CLEAN_JAVA=true;
             ;;
@@ -81,16 +84,23 @@ if [ -f pom.xml ] && [ -z "$NO_JAVA" ]; then
     funcHandleReturnCode $? "build maven"
 fi
 
+if [ -f composer.json ] && [ -z "$NO_COMPOSER" ]; then
+    echo 'composer found'
+    composer update
+    funcHandleReturnCode $? "build composer"
+fi
+
 # Remove previous Docker images just in case children dependencies exist on running container
 RMI=$(docker images -f dangling=true -q --no-trunc)
 if [ ! -z "$RMI" ] && [ -z "$NO_BUILD" ]; then
     echo "Remove local Docker image"
-    docker rmi -f $RMI
+    # docker rmi -f $RMI
 fi
 
-DOCKER_TAG=$(git log -1 --format=%h)
-HELM_DEPLOYMENT_NAME=${NAMESPACE}-${SERVICE_NAME}
+GIT_COMMIT=$(git log -1 --format=%h)
 TIMESTAMP=$(date +%s)
+DOCKER_TAG=${GIT_COMMIT}-${TIMESTAMP}
+HELM_DEPLOYMENT_NAME=${NAMESPACE}-${SERVICE_NAME}
 
 echo "DOCKER_TAG $DOCKER_TAG";
 echo "NAMESPACE $NAMESPACE";

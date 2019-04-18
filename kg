@@ -15,6 +15,8 @@ elif [ "$1" == "h" ]; then
         kubectl get hpa
 elif [ "$1" == "dh" ]; then
         kubectl describe hpa
+elif [ "$1" == "dc" ]; then
+        kubectl describe configmaps
 elif [ "$1" == "d" ]; then
         kubectl get deployments -o custom-columns=":metadata.name"
 elif [ "$1" == "dall" ]; then
