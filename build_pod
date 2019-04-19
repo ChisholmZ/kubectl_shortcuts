@@ -2,6 +2,8 @@
 #build pod on local kube
 #~zach
 
+STATUS=$(git status -s)
+
 source ks_config.sh
 source telhub.sh
 
@@ -88,6 +90,7 @@ if [ -f composer.json ] && [ -z "$NO_COMPOSER" ] && [ -z "$NO_BUILD" ]; then
     echo 'composer found'
     composer update
     funcHandleReturnCode $? "build composer"
+    sed -i 's/RUN cd \$HOME \&\& composer update \&\& composer dumpautoload/RUN cd \$HOME/g' Dockerfile
 fi
 
 # Remove previous Docker images just in case children dependencies exist on running container
@@ -121,9 +124,6 @@ fi
 
 kubectl config use-context $CONTEXT
 
-# kubectl autoscale deployment $SERVICE_NAME --cpu-percent=50 --min=1 --max=10
-# funcHandleReturnCode $? "autoscale $SERVICE_NAME"
-
 RELEASE_NAME_LISTING=$(helm ls ${HELM_DEPLOYMENT_NAME} --namespace ${NAMESPACE} --deployed)
 
 ## Check if Helm is installed otherwise upgrade
@@ -139,3 +139,10 @@ else
 fi
 
 funcHandleReturnCode $? "Helm"
+
+for file in Dockerfile composer.lock start.sh
+do
+    if [[ $STATUS != *"$file"* ]]; then
+        git checkout -- $file
+    fi
+done
