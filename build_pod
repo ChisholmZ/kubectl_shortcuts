@@ -84,7 +84,7 @@ if [ -f pom.xml ] && [ -z "$NO_JAVA" ]; then
     funcHandleReturnCode $? "build maven"
 fi
 
-if [ -f composer.json ] && [ -z "$NO_COMPOSER" ]; then
+if [ -f composer.json ] && [ -z "$NO_COMPOSER" ] && [ -z "$NO_BUILD" ]; then
     echo 'composer found'
     composer update
     funcHandleReturnCode $? "build composer"
@@ -98,8 +98,9 @@ if [ ! -z "$RMI" ] && [ -z "$NO_BUILD" ]; then
 fi
 
 GIT_COMMIT=$(git log -1 --format=%h)
-TIMESTAMP=$(date +%s)
-DOCKER_TAG=${GIT_COMMIT}-${TIMESTAMP}
+# TIMESTAMP=$(date +%s)
+# DOCKER_TAG=${GIT_COMMIT}-${TIMESTAMP}
+DOCKER_TAG=${GIT_COMMIT}
 HELM_DEPLOYMENT_NAME=${NAMESPACE}-${SERVICE_NAME}
 
 echo "DOCKER_TAG $DOCKER_TAG";

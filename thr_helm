@@ -13,24 +13,31 @@ fi
 
 cd $CHARTS
 
+## create new helm chart from heartbeat
 helm_chart(){
-    # if [ -f $1/values.yaml ]; then
-    #     for file in $(ls $1/templates)
-    #     do
-    #         sed -i "s/$1/{{ .Values.serviceName }}/g" $1/templates/$file
-    #     done
-    # fi
     if [ ! -d $1 ]; then
         cp -r heartbeat-ps-adapter $1
-        sed -i "s/heartbeat-ps-adapter/$1/g" $1/values.yaml
-        sed -i "s/heartbeat-ps-adapter/$1/g" $1/Chart.yaml
+        for file in 'values.yaml' 'Chart.yaml' 'templates/_helpers.tpl' 'templates/ingress.yaml' 'templates/NOTES.txt'
+        do
+            sed -i "s/heartbeat-ps-adapter/$1/g" $1/${file}.yaml
+        done
     fi
+}
+
+## update deployment file
+deployment(){
+    cp heartbeat-ps-adapter/templates/deployment.yaml $1/templates/deployment.yaml
 }
 
 if [ "$1" == "all" ]; then
     for s in "${SERVICE[@]}"
     do
         helm_chart $s
+    done
+elif [ "$1" == "dep" ]; then
+    for s in "${SERVICE[@]}"
+    do
+        deployment $s
     done
 else
     select s in "${SERVICE[@]}"
