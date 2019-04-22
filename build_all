@@ -11,6 +11,7 @@ do
     R="${REPO[$i]}"
     echo "$R $S"
     cd ${MAIN_DIR}/${R}
+    git reset --hard
     git checkout development
     git pull
     build_pod --dir=$R --service-name=$S

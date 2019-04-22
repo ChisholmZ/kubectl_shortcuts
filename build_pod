@@ -33,30 +33,33 @@ while [ $# -ne 0 ]
 do
     arg="${1:2}"
     case "${arg}" in
-        skip-build)
-            NO_BUILD=true;
-            ;;
-        skip-java)
-            NO_JAVA=true;
-            ;;
-        skip-composer)
-            NO_COMPOSER=true;
-            ;;
-        clean-java)
-            CLEAN_JAVA=true;
-            ;;
-        service-name=*)
-            SERVICE_NAME="${arg:13}";
-            ;;
-        dir=*)
-            DIR="${arg:4}";
-            ;;
-        local-path=*)
-            LOCAL_PATH="${arg:11}";
-            ;;
-        pull-policy=*)
-            PULL_POLICY="${arg:12}";
-            ;;
+       skip-build)
+           NO_BUILD=true;
+           ;;
+       skip-java)
+           NO_JAVA=true;
+           ;;
+       skip-composer)
+           NO_COMPOSER=true;
+           ;;
+       skip-rmi)
+           NO_RMI=true;
+           ;;
+       clean-java)
+           CLEAN_JAVA=true;
+           ;;
+       service-name=*)
+           SERVICE_NAME="${arg:13}";
+           ;;
+       dir=*)
+           DIR="${arg:4}";
+           ;;
+       local-path=*)
+           LOCAL_PATH="${arg:11}";
+           ;;
+       pull-policy=*)
+           PULL_POLICY="${arg:12}";
+           ;;
     esac
     shift
 done
@@ -70,7 +73,7 @@ if [ -z "$SERVICE_NAME" ]; then
     for R in "${REPO[@]}"
     do
        if [ $R == $DIR ]; then
-           SERVICE_NAME="${SERVICE[$i]}"
+          SERVICE_NAME="${SERVICE[$i]}"
        fi
        let i++
     done
@@ -91,13 +94,14 @@ if [ -f composer.json ] && [ -z "$NO_COMPOSER" ] && [ -z "$NO_BUILD" ]; then
     composer update
     funcHandleReturnCode $? "build composer"
     sed -i 's/RUN cd \$HOME \&\& composer update \&\& composer dumpautoload/RUN cd \$HOME/g' Dockerfile
+    sed -i 's/RUN composer update \&\& composer dumpautoload \-o//g' Dockerfile
 fi
 
 # Remove previous Docker images just in case children dependencies exist on running container
 RMI=$(docker images -f dangling=true -q --no-trunc)
-if [ ! -z "$RMI" ] && [ -z "$NO_BUILD" ]; then
+if [ ! -z "$RMI" ] && [ -z "$NO_BUILD" ] && [ -z "$NO_RMI" ]; then
     echo "Remove local Docker image"
-    # docker rmi -f $RMI
+    docker rmi -f $RMI
 fi
 
 GIT_COMMIT=$(git log -1 --format=%h)
@@ -143,6 +147,6 @@ funcHandleReturnCode $? "Helm"
 for file in Dockerfile composer.lock start.sh
 do
     if [[ $STATUS != *"$file"* ]]; then
-        git checkout -- $file
+       git checkout -- $file
     fi
 done
