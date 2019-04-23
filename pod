@@ -24,7 +24,7 @@ do
         echo $pod;
         name=$(echo $pod | sed -re 's/-[^-]+-[^-]+$//')
 
-        if [ "$1" == "describe" ]; then
+        if [ "$1" == "describe" ] || [ "$1" == "d" ]; then
                 kubectl describe pod $pod;
         elif [ "$1" == "logs" ]; then
                 con=$(echo $pod | sed -re 's/-[^-]+-[^-]+$/-con/')

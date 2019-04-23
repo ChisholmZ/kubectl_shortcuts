@@ -47,4 +47,7 @@ elif [ "$1" == 'killall' ]; then
     docker kill $(docker ps -q)
 elif [ "$1" == 'rmi' ]; then
     docker rmi -f $(docker ps -aqf "ancestor=${DIR}")
+elif [ "$1" == 'd' ]; then
+    POD=$(kubectl get pods | grep $APP_NAME | awk '{print $1}')
+    kubectl describe pod $POD
 fi
