@@ -146,7 +146,7 @@ funcHandleReturnCode $? "Helm"
 
 for file in Dockerfile composer.lock start.sh
 do
-    if [[ $STATUS != *"$file"* ]]; then
+    if [[ $STATUS != *"$file"* ]] && [ -f $file ]; then
        git checkout -- $file
     fi
 done

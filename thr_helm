@@ -25,19 +25,33 @@ helm_chart(){
 }
 
 ## update deployment file
-deployment(){
-    cp heartbeat-ps-adapter/templates/deployment.yaml $1/templates/deployment.yaml
+cp_file(){
+    cp heartbeat-ps-adapter/templates/${2}.yaml ${1}/templates/${2}.yaml
 }
+
+FILE='deployment'
+
+if [ ! -z "$2" ]; then
+    FILE=$2
+fi
+
+i=1
 
 if [ "$1" == "all" ]; then
     for s in "${SERVICE[@]}"
     do
-        helm_chart $s
+        if [ -z "${SKIP[$i]}" ]; then
+            helm_chart $s
+        fi
+        let i++
     done
-elif [ "$1" == "dep" ]; then
+elif [ "$1" == "f" ]; then
     for s in "${SERVICE[@]}"
     do
-        deployment $s
+        if [ -z "${SKIP[$i]}" ]; then
+            cp_file $s $FILE
+        fi
+        let i++
     done
 else
     select s in "${SERVICE[@]}"

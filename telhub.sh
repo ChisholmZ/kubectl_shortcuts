@@ -62,3 +62,9 @@ SERVICE[26]='fuel-event-xml-service'
 SERVICE[27]='critical-event-xml-service'
 SERVICE[28]='vehicle-faults-xml-service'
 SERVICE[29]='performace-monitor-xml-service'
+
+
+SKIP[17]='rabbit'
+SKIP[18]='telhub-db'
+SKIP[19]='alpine-sqs'
+SKIP[23]='router'
