@@ -24,19 +24,19 @@ func_dev(){
 }
 
 if [ "$1" == "all" ]; then
-    for r in "${REPO[@]}"
+    for r in "${!REPO_SERVICE[@]}"
     do
         func_dev $r
     done
 elif [ ! -z "$1" ]; then
-    for r in "${REPO[@]}"
+    for r in "${!REPO_SERVICE[@]}"
     do
         if [[ $r =~ $1 ]]; then
             func_dev $r
         fi
     done
 else
-    select r in "${REPO[@]}"
+    select r in "${!REPO_SERVICE[@]}"
     do
         func_dev $r
         exit

@@ -69,14 +69,7 @@ if [ -z "$DIR" ]; then
 fi
 
 if [ -z "$SERVICE_NAME" ]; then
-    i=0
-    for R in "${REPO[@]}"
-    do
-       if [ $R == $DIR ]; then
-          SERVICE_NAME="${SERVICE[$i]}"
-       fi
-       let i++
-    done
+    SERVICE_NAME=${REPO_SERVICE[$DIR]}
 fi
 
 if [ -f pom.xml ] && [ ! -z "$CLEAN_JAVA" ]; then

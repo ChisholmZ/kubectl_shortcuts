@@ -3,7 +3,12 @@
 
 source ks_config.sh
 
-select context in 'dev-telhub' 'uat-telhub' 'prf-telhub' 'prd-telhub' "$CONTEXT"
+if [ ! -z "$1" ]; then
+    kubectl config use-context $CONTEXTS[$1]
+    exit
+fi
+
+select context in "${CONTEXTS[@]}"
 do
        echo $context;
        kubectl config use-context $context;

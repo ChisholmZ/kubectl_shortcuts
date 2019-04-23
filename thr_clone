@@ -28,14 +28,14 @@ clone_repo(){
 }
 
 if [ "$1" == "all" ]; then
-    for r in "${REPO[@]}"
+    for r in "${!REPO_SERVICE[@]}"
     do
         if [ ! -d $r ]; then
             clone_repo $r
         fi
     done
 else
-    select r in "${REPO[@]}"
+    select r in "${!REPO_SERVICE[@]}"
     do
         clone_repo $r
         exit

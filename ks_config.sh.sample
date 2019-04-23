@@ -13,3 +13,11 @@ NAMESPACE='local'
 CONTEXT='local'
 # if windows use the following else remove winpty
 DOCKER='winpty docker'
+
+# select list for context
+declare -A CONTEXTS
+CONTEXTS[d]='dev-telhub'
+CONTEXTS[u]='uat-telhub'
+CONTEXTS[f]='prf-telhub'
+CONTEXTS[d]='prd-telhub'
+CONTEXTS[l]="$CONTEXT"

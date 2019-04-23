@@ -35,26 +35,22 @@ if [ ! -z "$2" ]; then
     FILE=$2
 fi
 
-i=1
-
 if [ "$1" == "all" ]; then
-    for s in "${SERVICE[@]}"
+    for s in "${REPO_SERVICE[@]}"
     do
-        if [ -z "${SKIP[$i]}" ]; then
+        if [ -z "${SKIP[$s]}" ]; then
             helm_chart $s
         fi
-        let i++
     done
 elif [ "$1" == "f" ]; then
-    for s in "${SERVICE[@]}"
+    for s in "${REPO_SERVICE[@]}"
     do
-        if [ -z "${SKIP[$i]}" ]; then
+        if [ -z "${SKIP[$s]}" ]; then
             cp_file $s $FILE
         fi
-        let i++
     done
 else
-    select s in "${SERVICE[@]}"
+    select s in "${REPO_SERVICE[@]}"
     do
         helm_chart $s
         exit

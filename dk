@@ -21,14 +21,7 @@ else
     PORT=$3
 fi
 
-i=0
-for R in "${REPO[@]}"
-do
-    if [ $DIR == $R ]; then
-        APP_NAME="${SERVICE[$i]}"
-    fi
-    let i++
-done
+APP_NAME=${REPO_SERVICE[$DIR]}
 
 if [ "$1" == 'build' ]; then
     $DOCKER build --tag=${DIR} .

@@ -1,0 +1,20 @@
+#!/bin/sh
+#shortcut git status
+#~zach
+
+source telhub.sh
+
+i=0
+cnt=0
+for R in "${REPO[@]}"
+do
+   SERVICE_NAME="${SERVICE[$i]}"
+   if [ $R != $SERVICE_NAME ]; then
+      echo "${SERVICE_NAME} $R"
+      let cnt++
+   fi
+   let i++
+   echo "REPO_SERVICE[${R}]='${SERVICE_NAME}'" >> telhub.sh
+done
+
+echo $cnt
