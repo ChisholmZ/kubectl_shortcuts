@@ -1,4 +1,6 @@
 ks_config.sh
+py_config.py
+__pycache__
 /telhub/*
 !/telhub/rabbit
 !/telhub/telhub-db
