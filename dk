@@ -21,7 +21,13 @@ else
     PORT=$3
 fi
 
-APP_NAME=${REPO_SERVICE[$DIR]}
+if [ -z "$2" ] && [ "$1" == 'scale' ]; then
+    REPLICAS=1
+else
+    REPLICAS=$2
+fi
+
+SERVICE_NAME=${REPO_SERVICE[$DIR]}
 
 if [ "$1" == 'build' ]; then
     $DOCKER build --tag=${DIR} .
@@ -48,6 +54,8 @@ elif [ "$1" == 'killall' ]; then
 elif [ "$1" == 'rmi' ]; then
     docker rmi -f $(docker ps -aqf "ancestor=${DIR}")
 elif [ "$1" == 'd' ]; then
-    POD=$(kubectl get pods | grep $APP_NAME | awk '{print $1}')
+    POD=$(kubectl get pods | grep $SERVICE_NAME | awk '{print $1}')
     kubectl describe pod $POD
+elif [ "$1" == 'scale' ]; then
+    kubectl scale --replicas=$REPLICAS deployment/$SERVICE_NAME
 fi
