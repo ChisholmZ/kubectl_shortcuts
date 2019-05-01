@@ -1,5 +1,5 @@
-# Telhub Local env
-For instructions how to setup local environment go to [The Wiki](https://github.com/ChisholmZ/kubectl_shortcuts/wiki/Telhub-Local-Dev)
+# Kubernetes Local env
+For instructions how to setup local environment go to [The Wiki](https://github.com/ChisholmZ/kubectl_shortcuts/wiki/Kubernetes-Local-Dev)
 
 # kubectl and docker shortcuts
 
