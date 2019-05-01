@@ -10,6 +10,8 @@ source telhub.sh
 git config core.fileMode false
 dos2unix Dockerfile
 dos2unix *.sh
+dos2unix *.json
+dos2unix *.conf
 
 funcHandleReturnCode() {
 
@@ -68,6 +70,8 @@ if [ -z "$DIR" ]; then
     DIR=$(basename "$MAIN_DIR")
 fi
 
+DIR=$(echo $DIR | sed "s/telematics-hub-//g")
+
 if [ -z "$SERVICE_NAME" ]; then
     SERVICE_NAME=${REPO_SERVICE[$DIR]}
 fi
@@ -76,7 +80,7 @@ if [ -f pom.xml ] && [ ! -z "$CLEAN_JAVA" ]; then
     mvn clean
 fi
 
-if [ -f pom.xml ] && [ -z "$NO_JAVA" ]; then
+if [ -f pom.xml ] && [ -z "$NO_JAVA" ] && [ -z "$NO_BUILD" ]; then
     echo 'java found'
     mvn -B -f pom.xml clean install -DskipTests=true
     funcHandleReturnCode $? "build maven"
@@ -86,9 +90,10 @@ if [ -f composer.json ] && [ -z "$NO_COMPOSER" ] && [ -z "$NO_BUILD" ]; then
     echo 'composer found'
     composer update
     funcHandleReturnCode $? "build composer"
-    sed -i 's/RUN cd \$HOME \&\& composer update \&\& composer dumpautoload/RUN cd \$HOME/g' Dockerfile
-    sed -i 's/RUN composer update \&\& composer dumpautoload \-o//g' Dockerfile
 fi
+
+sed -i 's/RUN cd \$HOME \&\& composer update \&\& composer dumpautoload/RUN cd \$HOME/g' Dockerfile
+sed -i 's/RUN composer update \&\& composer dumpautoload \-o//g' Dockerfile
 
 # Remove previous Docker images just in case children dependencies exist on running container
 RMI=$(docker images -f dangling=true -q --no-trunc)
@@ -137,9 +142,11 @@ fi
 
 funcHandleReturnCode $? "Helm"
 
-for file in Dockerfile composer.lock start.sh
-do
-    if [[ $STATUS != *"$file"* ]] && [ -f $file ]; then
-       git checkout -- $file
-    fi
-done
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+# for file in Dockerfile composer.lock start.sh
+# do
+#     if [[ $STATUS != *"$file"* ]] && [ -f $file ]; then
+#        git checkout $branch $file
+#     fi
+# done
