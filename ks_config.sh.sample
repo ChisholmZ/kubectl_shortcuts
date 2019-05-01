@@ -2,10 +2,13 @@
 # config
 #~zach
 
-#path to helm charts
+#path to this repo
 BASH_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
+#path to telhub repos 
 MAIN_DIR=${BASH_DIR}/telhub
+#path to devops repo
 DEVOPS=${MAIN_DIR}/devops
+#path to helm charts
 CHARTS=${DEVOPS}/helm-charts
 # local docker namespace
 NAMESPACE='local'
