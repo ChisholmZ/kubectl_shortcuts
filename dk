@@ -9,6 +9,8 @@ FULL=$(pwd)
 DIR=$(basename "$FULL")
 CON=$(docker ps -aqf "ancestor=${DIR}" -n 1)
 
+DIR=$(echo $DIR | sed "s/telematics-hub-//g"
+
 if [ -z "$2" ]; then
     PORT=4000
 else
