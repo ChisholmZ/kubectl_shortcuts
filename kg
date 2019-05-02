@@ -19,16 +19,6 @@ elif [ "$1" == "dc" ]; then
         kubectl describe configmaps
 elif [ "$1" == "d" ]; then
         kubectl get deployments -o custom-columns=":metadata.name"
-elif [ "$1" == "dall" ]; then
-    for N in $(kubectl get deployments -o custom-columns=":metadata.name")
-    do
-        kubectl delete deployment $N
-    done
-elif [ "$1" == "sall" ]; then
-    for N in $(kubectl get services -o custom-columns=":metadata.name")
-    do
-        kubectl delete services $N
-    done
 else
         kubectl get pods $*
 fi

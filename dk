@@ -38,7 +38,7 @@ elif [ "$1" == 'l' ] || [ "$1" == 'logs' ]; then
     $DOCKER logs ${CON}
 elif [ "$1" == 'pull' ]; then
     docker pull ${DIR}:latest
-elif [ "$1" == 'b' ]; then
+elif [ "$1" == 'b' ] || [ -z "$1" ]; then
     $DOCKER exec -it ${CON} //bin/bash
 elif [ "$1" == 'root' ]; then
     $DOCKER exec -it --user root ${CON} //bin/bash

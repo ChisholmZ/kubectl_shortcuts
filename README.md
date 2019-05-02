@@ -8,7 +8,7 @@ A few shortcuts for kubectl based on our environment.
 To use clone repo and add to your path.
 
 ### pod
-will give a list of pods to select based on your context.
+Will give a list of pods to select based on your context.
 
 `pod` will bring up the bash for the pod that you select.
 
@@ -31,6 +31,14 @@ will give a list of context to select and set the context base on your choice.
 `kg a` shortcut for `kubectl get pods --all-namespaces`
 
 `kg s` shortcut for `kubectl get services`
+
+`kg h` shortcut for `kubectl get hpa`
+
+`kg dh` shortcut for `kubectl describe hpa`
+
+`kg dc` shortcut for `kubectl describe configmaps`
+
+`kg d` shortcut for `kubectl get deployments -o custom-columns=":metadata.name"`
 
 `kg k` will ask to change context, then shortcut for `kubectl get pods`
 
@@ -57,16 +65,22 @@ Copy this to `hs_config.sh` and set the varibles to reflect your local environme
 `build_all` will build all of the pods from the repo current directory and push to local kubernetes cluster
 
 ## dk
-shortcut for docker based on current directory
+shortcut for local Docker and Kubernetes based on current directory
 
 #### Build the Docker container
 `dk build` shortcut for `docker build --tag=CURRENT_DIR`
+
+#### Describe the Kubernetes pod based on current directory
+`dk d` shortcut for `kubectl describe pod POD_NAME`
+
+#### Scale Kubernetes pod based on current directory
+`dk scale 1` shortcut for `kubectl scale --replicas=$REPLICAS deployment/$SERVICE_NAME`
 
 #### Run Docker container
 `dk r` shortcut for `docker run -d -p 4000:80 CURRENT_DIR`
 
 #### Bash into the Docker container
-`dk b` shortcut for `docker exec -it CURRENT_CONTAINER //bin/bash`
+`dk b` or `dk` shortcut for `docker exec -it CURRENT_CONTAINER //bin/bash`
 
 #### Bash into the Docker container as root
 `dk root` shortcut for `docker exec -it --user root CURRENT_CONTAINER //bin/bash`
@@ -82,3 +96,6 @@ shortcut for docker based on current directory
 
 #### kill all docker containers
 `dk killall` shortcut for `docker kill $(docker ps -q)`
+
+#### remove previous docker containers
+`dk rmi` shortcut for `docker rmi -f $(docker ps -aqf "ancestor=${DIR}")`
