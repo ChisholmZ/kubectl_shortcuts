@@ -4,7 +4,7 @@
 
 #path to this repo
 BASH_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
-#path to telhub repos 
+#path to telhub repos
 MAIN_DIR=${BASH_DIR}/telhub
 #path to devops repo
 DEVOPS=${MAIN_DIR}/devops
@@ -16,6 +16,8 @@ NAMESPACE='local'
 CONTEXT='local'
 # if windows use the following else remove winpty
 DOCKER='winpty docker'
+# if windows will convert files with dos2unix / else set false
+DOS=true
 
 # select list for context
 declare -A CONTEXTS

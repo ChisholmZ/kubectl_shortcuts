@@ -2,16 +2,12 @@
 #build pod on local kube
 #~zach
 
-STATUS=$(git status -s)
+MOD=$(git ls-files -m)
 
 source ks_config.sh
 source telhub.sh
 
 git config core.fileMode false
-dos2unix Dockerfile
-dos2unix *.sh
-dos2unix *.json
-dos2unix *.conf
 
 funcHandleReturnCode() {
 
@@ -41,6 +37,9 @@ do
        skip-java)
            NO_JAVA=true;
            ;;
+       skip-dos)
+           DOS=false;
+           ;;
        skip-composer)
            NO_COMPOSER=true;
            ;;
@@ -66,6 +65,15 @@ do
     shift
 done
 
+if [ $DOS == true ]; then
+    dos2unix Dockerfile
+    dos2unix *.sh
+    dos2unix *.json
+    dos2unix *.conf
+    dos2unix tmpfiles/*
+    dos2unix vol1/*
+fi
+
 if [ -z "$DIR" ]; then
     DIR=$(basename "$MAIN_DIR")
 fi
@@ -82,6 +90,9 @@ fi
 
 if [ -f pom.xml ] && [ -z "$NO_JAVA" ] && [ -z "$NO_BUILD" ]; then
     echo 'java found'
+    if [ $DOS == true ]; then
+        find src -type f -print0 | xargs -0 dos2unix
+    fi
     mvn -B -f pom.xml clean install -DskipTests=true
     funcHandleReturnCode $? "build maven"
 fi
@@ -90,6 +101,10 @@ if [ -f composer.json ] && [ -z "$NO_COMPOSER" ] && [ -z "$NO_BUILD" ]; then
     echo 'composer found'
     composer update
     funcHandleReturnCode $? "build composer"
+fi
+
+if [ -d php ]; then
+    rm -rf php
 fi
 
 sed -i 's/RUN cd \$HOME \&\& composer update \&\& composer dumpautoload/RUN cd \$HOME/g' Dockerfile
@@ -144,9 +159,9 @@ funcHandleReturnCode $? "Helm"
 
 branch=$(git rev-parse --abbrev-ref HEAD)
 
-# for file in Dockerfile composer.lock start.sh
-# do
-#     if [[ $STATUS != *"$file"* ]] && [ -f $file ]; then
-#        git checkout $branch $file
-#     fi
-# done
+for file in $(git ls-files -m)
+do
+    if [[ $MOD != *"$file"* ]] && [ -f $file ]; then
+       git checkout $branch $file
+    fi
+done

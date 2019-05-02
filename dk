@@ -42,6 +42,8 @@ elif [ "$1" == 'b' ] || [ -z "$1" ]; then
     $DOCKER exec -it ${CON} //bin/bash
 elif [ "$1" == 'root' ]; then
     $DOCKER exec -it --user root ${CON} //bin/bash
+elif [ "$1" == 'user' ]; then
+    $DOCKER exec -it --user $2 ${CON} //bin/bash
 elif [ "$1" == 'p' ] || [ "$1" == 'prune' ]; then
     docker system prune -f -a
 elif [ "$1" == 'ls' ]; then
