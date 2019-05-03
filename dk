@@ -5,9 +5,7 @@
 source ks_config.sh
 source telhub.sh
 
-FULL=$(pwd)
-DIR=$(basename "$FULL")
-DIR=$(echo $DIR | sed "s/telematics-hub-//g")
+DIR=$(getDir)
 CON=$(docker ps -aqf "ancestor=${DIR}" -n 1)
 
 if [ -z "$2" ]; then
@@ -29,6 +27,7 @@ else
 fi
 
 SERVICE_NAME=${REPO_SERVICE[$DIR]}
+POD=$(kubectl get pods | grep $SERVICE_NAME | awk '{print $1}')
 
 if [ "$1" == 'build' ]; then
     $DOCKER build --tag=${DIR} .
@@ -57,8 +56,11 @@ elif [ "$1" == 'killall' ]; then
 elif [ "$1" == 'rmi' ]; then
     docker rmi -f $(docker ps -aqf "ancestor=${DIR}")
 elif [ "$1" == 'd' ]; then
-    POD=$(kubectl get pods | grep $SERVICE_NAME | awk '{print $1}')
     kubectl describe pod $POD
 elif [ "$1" == 'scale' ]; then
     kubectl scale --replicas=$REPLICAS deployment/$SERVICE_NAME
+elif [ "$1" == 'delete' ]; then
+    kubectl delete pod $POD --force --grace-period=0
+elif [ "$1" == 'dos' ]; then
+    find . -type f -print0 | xargs -0 dos2unix
 fi

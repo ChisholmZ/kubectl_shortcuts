@@ -42,3 +42,25 @@ REPO_SERVICE[fuel-event-xml-service]='fuel-event-xml-service'
 REPO_SERVICE[critical-event-xml-service]='critical-event-xml-service'
 REPO_SERVICE[vehicle-faults-xml-service]='vehicle-faults-xml-service'
 REPO_SERVICE[performace-monitor-xml-service]='performace-monitor-xml-service'
+
+getDir(){
+    FULL=$(pwd)
+    DIR=$(basename "$FULL")
+    DIR=$(echo $DIR | sed "s/telematics-hub-//g")
+    echo $DIR
+}
+
+getServiceName(){
+    DIR=$(getDir)
+    echo ${REPO_SERVICE[$DIR]}
+}
+
+getPod(){
+    SERVICE_NAME=$(getServiceName)
+    echo $(kubectl get pods | grep $SERVICE_NAME | awk '{print $1}')
+}
+
+getCon(){
+    DIR=$(getDir)
+    echo $(docker ps -aqf "ancestor=${DIR}" -n 1)
+}
