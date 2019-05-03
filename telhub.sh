@@ -62,5 +62,5 @@ getPod(){
 
 getCon(){
     DIR=$(getDir)
-    echo $(docker ps -aqf "ancestor=${DIR}" -n 1)
+    echo $(docker ps -aqf "ancestor=${DIR}")
 }

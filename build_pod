@@ -99,7 +99,7 @@ fi
 
 if [ -f composer.json ] && [ -z "$NO_COMPOSER" ] && [ -z "$NO_BUILD" ]; then
     echo 'composer found'
-    composer update
+    composer update -o
     funcHandleReturnCode $? "build composer"
 fi
 

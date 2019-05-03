@@ -6,7 +6,7 @@ source ks_config.sh
 source telhub.sh
 
 DIR=$(getDir)
-CON=$(docker ps -aqf "ancestor=${DIR}" -n 1)
+CON=$(docker ps -aqf "ancestor=${DIR}")
 
 if [ -z "$2" ]; then
     PORT=4000
@@ -57,6 +57,8 @@ elif [ "$1" == 'rmi' ]; then
     docker rmi -f $(docker ps -aqf "ancestor=${DIR}")
 elif [ "$1" == 'd' ]; then
     kubectl describe pod $POD
+elif [ "$1" == 'dd' ]; then
+    kubectl describe deployment $SERVICE_NAME
 elif [ "$1" == 'scale' ]; then
     kubectl scale --replicas=$REPLICAS deployment/$SERVICE_NAME
 elif [ "$1" == 'delete' ]; then
