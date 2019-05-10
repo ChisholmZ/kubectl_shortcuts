@@ -44,4 +44,4 @@ for job, params in data_loaded['jobs'].items():
     else:
         response = requests.post(url, params)
         print(job, params, response, datetime.now(), '\n', sep='\n')
-    time.sleep(args.seconds)
+    time.sleep(params.get('wait') or args.seconds)

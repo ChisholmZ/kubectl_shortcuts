@@ -3,6 +3,7 @@ jobs:
         commit:
         branch:
         run_config: true
+        wait: 1 ## override wait time until next deployment
     telhub_migrations:
         commit:
         branch:
