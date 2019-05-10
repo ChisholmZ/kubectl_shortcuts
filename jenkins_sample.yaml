@@ -1,21 +1,98 @@
 jobs:
     telhub_devops:
         commit:
-        release:
+        branch:
         run_config: true
     telhub_migrations:
         commit:
-        release:
-        params:
+        branch:
     telhub-messages-router:
         commit:
-        release:
-        params:
+        branch:
     telhub-inbound-messages-api:
         commit:
-        release:
-        params:
+        branch:
     telhub-critical-event-ps-adapter:
         commit:
-        release:
-        params:
+        branch:
+    telhub-critical-event-ps-adapter:
+        commit:
+        branch:
+    telhub-critical-event-xml-service:
+        commit:
+        branch:
+    telhub-device-outbound:
+        commit:
+        branch:
+    telhub-device-update:
+        commit:
+        branch:
+    telhub-driver-parm-update:
+        commit:
+        branch:
+    telhub-driver-update:
+        commit:
+        branch:
+    telhub-equipment-update:
+        commit:
+        branch:
+    telhub-fuel-event-xml-service:
+        commit:
+        branch:
+    telhub-heartbeat-xml-service:
+        commit:
+        branch:
+    telhub-hos-events-ps-adapter:
+        commit:
+        branch:
+    telhub-hos-timer-api:
+        commit:
+        branch:
+    telhub-inbound-rods-adapter:
+        commit:
+        branch:
+    telhub-inbound-rods-api:
+        commit:
+        branch:
+    telhub-orion-driver-adapter:
+        commit:
+        branch:
+    telhub-orion-driver-parameter-group-adapter:
+        commit:
+        branch:
+    telhub-orion-equipment-adapter:
+        commit:
+        branch:
+    telhub-pay-file-adapter:
+        commit:
+        branch:
+    telhub-pay-file-generator:
+        commit:
+        branch:
+    telhub-performace-monitor-xml-service:
+        commit:
+        branch:
+    telhub-ps-fuel-event-adapter:
+        commit:
+        branch:
+    telhub-ps-heartbeat-adapter:
+        commit:
+        branch:
+    telhub-ps-performance-monitor-adapter:
+        commit:
+        branch:
+    telhub-ps-vehicle-fault-adapter:
+        commit:
+        branch:
+    telhub-purge-service:
+        commit:
+        branch:
+    telhub-rods-ps-adapter:
+        commit:
+        branch:
+    telhub-vehicle-fault-ps-adapter:
+        commit:
+        branch:
+    telhub-vehicle-faults-xml-service:
+        commit:
+        branch:

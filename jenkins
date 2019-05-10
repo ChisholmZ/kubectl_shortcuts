@@ -1,20 +1,47 @@
 #!/usr/bin/env python
 
-import yaml, io, os, argparse, requests, sys
+import yaml, io, os, argparse, requests, sys, time
+from datetime import datetime
 from jenkins_config import *
 
+## unbuffer stdout to fix time
+class Unbuffered(object):
+   def __init__(self, stream):
+       self.stream = stream
+   def write(self, data):
+       self.stream.write(data)
+       self.stream.flush()
+   def writelines(self, datas):
+       self.stream.writelines(datas)
+       self.stream.flush()
+   def __getattr__(self, attr):
+       return getattr(self.stream, attr)
+
+sys.stdout = Unbuffered(sys.stdout)
+
+## parse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--context', '-C', help='Context', type=str, default='Dev')
+parser.add_argument('--test', '-T', help='Test', action='store_true')
+parser.add_argument('--seconds', '-S', help='Seconds between jobs', type=int, default=120)
+parser.add_argument('--yaml', '-Y', help='yaml file to read', type=str, default="%s/jenkins.yaml" % sys.path[0])
 args = parser.parse_args()
 
+## set Jenkins url from config
 jenkins_url="%s:%s@%s" % (jenkins_user, jenkins_token, jenkins_domain)
 
-with io.open("%s/jenkins.yaml" % sys.path[0], 'r') as stream:
+## read in yaml
+with io.open(args.yaml, 'r') as stream:
     data_loaded = yaml.safe_load(stream)
 
+## send jobs
 for job, params in data_loaded['jobs'].items():
     build = 'buildWithParameters' if job == 'telhub_devops' or args.context != 'Dev' else 'build'
-    url = 'http://%s/job/TelematicsHub-%s/job/%s/%s' % (jenkins_url, args.context, build, job)
+    url = 'http://%s/job/TelematicsHub-%s/job/%s/%s' % (jenkins_url, args.context, job, build)
     params.update({'token' : job})
-    response = requests.get(url, params)
-    print(url, params, response)
+    if args.test :
+        print(job, url, params, datetime.now(), '\n', sep='\n')
+    else:
+        response = requests.post(url, params)
+        print(job, params, response, datetime.now(), '\n', sep='\n')
+    time.sleep(args.seconds)
