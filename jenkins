@@ -15,5 +15,6 @@ with io.open("%s/jenkins.yaml" % sys.path[0], 'r') as stream:
 for job, params in data_loaded['jobs'].items():
     build = 'buildWithParameters' if job == 'telhub_devops' or args.context != 'Dev' else 'build'
     url = 'http://%s/job/TelematicsHub-%s/job/%s/%s' % (jenkins_url, args.context, build, job)
+    params.update({'token' : job})
     response = requests.get(url, params)
     print(url, params, response)
