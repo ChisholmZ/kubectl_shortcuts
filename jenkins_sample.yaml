@@ -16,13 +16,7 @@ jobs:
     telhub-critical-event-ps-adapter:
         commit:
         branch:
-    telhub-critical-event-ps-adapter:
-        commit:
-        branch:
     telhub-critical-event-xml-service:
-        commit:
-        branch:
-    telhub-device-outbound:
         commit:
         branch:
     telhub-device-update:
@@ -47,12 +41,6 @@ jobs:
         commit:
         branch:
     telhub-hos-timer-api:
-        commit:
-        branch:
-    telhub-inbound-rods-adapter:
-        commit:
-        branch:
-    telhub-inbound-rods-api:
         commit:
         branch:
     telhub-orion-driver-adapter:
