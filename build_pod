@@ -109,6 +109,7 @@ fi
 
 sed -i 's/RUN cd \$HOME \&\& composer update \&\& composer dumpautoload/RUN cd \$HOME/g' Dockerfile
 sed -i 's/RUN composer update \&\& composer dumpautoload \-o//g' Dockerfile
+sed -i 's/RUN composer update -o//g' Dockerfile
 
 # Remove previous Docker images just in case children dependencies exist on running container
 RMI=$(docker images -f dangling=true -q --no-trunc)

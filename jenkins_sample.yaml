@@ -1,0 +1,21 @@
+jobs:
+    telhub_devops:
+        commit:
+        release:
+        run_config: true
+    telhub_migrations:
+        commit:
+        release:
+        params:
+    telhub-messages-router:
+        commit:
+        release:
+        params:
+    telhub-inbound-messages-api:
+        commit:
+        release:
+        params:
+    telhub-critical-event-ps-adapter:
+        commit:
+        release:
+        params:

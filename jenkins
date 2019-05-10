@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+
+import yaml, io, os, argparse, requests, sys
+from jenkins_config import *
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--context', '-C', help='Context', type=str, default='Dev')
+args = parser.parse_args()
+
+jenkins_url="%s:%s@%s" % (jenkins_user, jenkins_token, jenkins_domain)
+
+with io.open("%s/jenkins.yaml" % sys.path[0], 'r') as stream:
+    data_loaded = yaml.safe_load(stream)
+
+for job, params in data_loaded['jobs'].items():
+    build = 'buildWithParameters' if job == 'telhub_devops' or args.context != 'Dev' else 'build'
+    url = 'http://%s/job/TelematicsHub-%s/job/%s/%s' % (jenkins_url, args.context, build, job)
+    response = requests.get(url, params)
+    print(url, params, response)

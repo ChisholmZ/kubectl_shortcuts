@@ -4,3 +4,5 @@ __pycache__
 /telhub/*
 !/telhub/rabbit
 !/telhub/telhub-db
+jenkins.yaml
+jenkins_config.py
