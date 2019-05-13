@@ -22,7 +22,7 @@ jenkins_url="%s:%s@%s" % (jenkins_user, jenkins_token, jenkins_domain)
 
 if args.job:
     create_job(args, jenkins_url)
-if args.release:
+elif args.release:
     create_yaml(args)
 else:
     run(args, jenkins_url)
