@@ -10,7 +10,8 @@ sys.stdout = Unbuffered(sys.stdout)
 ## parse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--context', '-C', help='Context', type=str, default='Dev')
-parser.add_argument('--job', '-J', help='Context', type=str, default=None)
+parser.add_argument('--job', '-J', help='Create Jenkins Job', type=str, default=None)
+parser.add_argument('--release', '-R', help='Create Release yaml', type=str, default=None)
 parser.add_argument('--test', '-T', help='Test', action='store_true')
 parser.add_argument('--seconds', '-S', help='Seconds between jobs', type=int, default=120)
 parser.add_argument('--yaml', '-Y', help='yaml file to read', type=str, default="%s/jenkins.yaml" % sys.path[0])
@@ -21,5 +22,7 @@ jenkins_url="%s:%s@%s" % (jenkins_user, jenkins_token, jenkins_domain)
 
 if args.job:
     create_job(args, jenkins_url)
+if args.release:
+    create_yaml(args)
 else:
     run(args, jenkins_url)

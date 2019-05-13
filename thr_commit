@@ -1,0 +1,28 @@
+#!/bin/sh
+#shortcut git status
+#~zach
+
+BASH_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
+
+source $BASH_DIR/ks_config.sh
+source $BASH_DIR/telhub.sh
+
+func_commit(){
+    cd $MAIN_DIR/$1
+    printf "\n$1\n"
+    echo $(git ls-remote origin refs/heads/master | awk '{ print $1}')
+}
+
+if [ "$1" == "all" ]; then
+    for r in "${!REPO_SERVICE[@]}"
+    do
+        func_commit $r
+    done
+elif [ ! -z "$1" ]; then
+    for r in "${!REPO_SERVICE[@]}"
+    do
+        if [[ $r =~ $1 ]]; then
+            func_commit $r
+        fi
+    done
+fi
