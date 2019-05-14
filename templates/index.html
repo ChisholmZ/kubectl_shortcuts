@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>Home</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link type=text/css href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    {% raw %}
+    <div id="demo">
+      <h1>Telhub</h1>
+      <template>
+        <input type="text"
+          :id="release"
+          :value="release"
+          name="release"
+          v-model="currentRelease">
+      </template>
+      <table>
+        <tr v-for="(record, repo) in repos">
+          <td>
+             {{ repo }}
+          </td>
+          <td>
+             {{ record.commit }}
+          </td>
+          <td>
+              {{ record.branch }}
+          </td>
+        </tr>
+      </table>
+    </div>
+    {% endraw %}
+</body>
+</html>
