@@ -1,14 +1,17 @@
 from github import Github
 import oyaml as yaml, json, io, os, subprocess, sys, re
 
+# get services from json to fix names of repos
 def get_services():
     with open(os.path.join(sys.path[0],'lib','telhub.json')) as file:
         services = json.loads(file.read())
     return services
 
+# get repos from github api
 def get_repos(github_token):
     return Github(github_token).search_repositories(query='telematics hub user:schneidertech')
 
+# create dictionary for yaml
 def build_yaml(args, github_token):
     services = get_services()
     yaml = {}
@@ -28,6 +31,7 @@ def build_yaml(args, github_token):
     yaml[job].update({'wait': 1})
     return {'jobs': {**devops, **yaml}}
 
+# build the yaml for jenkins to deploy from
 def create_yaml(args, github_token):
     path = os.path.join(sys.path[0],'deployments','%s.yaml' % args.release)
     with open(path, 'w') as outfile:
