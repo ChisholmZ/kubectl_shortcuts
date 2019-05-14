@@ -26,10 +26,12 @@ def build_yaml(args, github_token):
         if service == 'devops':
             devops = dict
             devops[job].update({'run_config': True, 'wait': 1})
+        elif service == 'migrations':
+            migrations = dict
         else:
             yaml.update(dict)
     yaml[job].update({'wait': 1})
-    return {'jobs': {**devops, **yaml}}
+    return {'jobs': {**devops, **migrations, **yaml}}
 
 # build the yaml for jenkins to deploy from
 def create_yaml(args, github_token):
