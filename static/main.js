@@ -14,12 +14,12 @@ function toQueryString(obj) {
         var apiURL = '/github'
 
         /**
-         * Actual demo
+         * Actual repo
          */
 
-        var demo = new Vue({
+        var repo = new Vue({
 
-          el: '#demo',
+          el: '#repo',
 
           data: {
             currentRelease: 'Release_',
