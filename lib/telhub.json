@@ -1,12 +1,9 @@
 {
-    "devops": "devops",
     "inbound-api": "inbound-messages-api",
-    "migrations": "migrations",
     "router": "messages-router",
     "inbound-api": "inbound-messages-api",
     "rods-adapter": "rods-ps-adapter",
     "ps-heartbeat-adapter": "heartbeat-ps-adapter",
-    "pay-file-generator": "pay-file-generator",
     "ps-driver-adapter": "driver-update-ps-adapter",
     "ps-fuel-event-adapter": "fuel-event-ps-adapter",
     "ps-critical-event-adapter": "critical-event-ps-adapter",
@@ -17,15 +14,5 @@
     "ps-device-adapter": "device-update-ps-adapter",
     "ps-driver-parameter-group-adapter": "driver-parm-update-ps-adapter",
     "ps-equipment-adapter": "equipment-update-ps-adapter",
-    "ps-pay-adapter": "pay-file-adapter",
-    "orion-equipment-adapter": "orion-equipment-adapter",
-    "orion-driver-adapter": "orion-driver-adapter",
-    "orion-driver-parameter-group-adapter": "orion-driver-parameter-group-adapter",
-    "purge-service": "purge-service",
-    "heartbeat-xml-service": "heartbeat-xml-service",
-    "fuel-event-xml-service": "fuel-event-xml-service",
-    "critical-event-xml-service": "critical-event-xml-service",
-    "vehicle-faults-xml-service": "vehicle-faults-xml-service",
-    "performace-monitor-xml-service": "performace-monitor-xml-service",
-    "geofence-api": "geofence-api"
+    "ps-pay-adapter": "pay-file-adapter"
 }
