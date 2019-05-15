@@ -42,6 +42,7 @@ REPO_SERVICE[fuel-event-xml-service]='fuel-event-xml-service'
 REPO_SERVICE[critical-event-xml-service]='critical-event-xml-service'
 REPO_SERVICE[vehicle-faults-xml-service]='vehicle-faults-xml-service'
 REPO_SERVICE[performace-monitor-xml-service]='performace-monitor-xml-service'
+REPO_SERVICE[geofence-api]='geofence-api'
 
 getDir(){
     FULL=$(pwd)

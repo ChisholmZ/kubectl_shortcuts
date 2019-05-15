@@ -17,10 +17,17 @@ cd $CHARTS
 helm_chart(){
     if [ ! -d $1 ]; then
         cp -r heartbeat-ps-adapter $1
-        for file in 'values.yaml' 'Chart.yaml' 'templates/_helpers.tpl' 'templates/ingress.yaml' 'templates/NOTES.txt'
+        for file in 'values.yaml' 'Chart.yaml' 'templates/_helpers.tpl' 'templates/ingress.yaml' 'templates/NOTES.txt' 'templates/tests/test-connection.yaml'
         do
-            sed -i "s/heartbeat-ps-adapter/$1/g" $1/${file}.yaml
+            sed -i "s/heartbeat-ps-adapter/$1/g" $1/${file}
+            sed -i "s/inbound-heartbeat-adapter/$1/g" $1/${file}
         done
+        name=${1/-/_}
+        echo $name
+        sed -i "s/app_name_heartbeat/app_name_${name}/g" $1/templates/env.yaml
+        sed -i "s/tractor_polling/${name}/g" $1/templates/env.yaml
+        sed -i "s/TRACTOR_POLLING/${name^^}/g" $1/templates/env.yaml
+        sed -i "s/TRACTOR/${name^^}/g" $1/templates/env.yaml
     fi
 }
 
@@ -49,6 +56,8 @@ elif [ "$1" == "f" ]; then
             cp_file $s $FILE
         fi
     done
+elif [ "$1" == "s" ] && [ ! -z "$2" ]; then
+    helm_chart "${REPO_SERVICE[$2]}"
 else
     select s in "${REPO_SERVICE[@]}"
     do
