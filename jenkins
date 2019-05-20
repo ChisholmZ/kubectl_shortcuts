@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import argparse, sys
+import argparse, sys, json
 from jenkins_config import *
 from lib import *
 
@@ -11,6 +11,7 @@ sys.stdout = Unbuffered(sys.stdout)
 parser = argparse.ArgumentParser()
 parser.add_argument('--context', '-C', help='Context', type=str, default='Dev')
 parser.add_argument('--job', '-J', help='Create Jenkins Job', type=str, default=None)
+parser.add_argument('--deploy', '-D', help='Run Jenkins Job', action='store_true')
 parser.add_argument('--release', '-R', help='Create Release yaml', type=str, default=None)
 parser.add_argument('--test', '-T', help='Test', action='store_true')
 parser.add_argument('--github', '-G', help='Test', action='store_true')
@@ -25,6 +26,8 @@ if args.job:
     create_job(args, jenkins_url)
 elif args.release:
     create_yaml(args, github_token)
+elif args.deploy:
+    print(json.dump(get_jobs(github_token)))
 elif args.github:
     for repo in get_repos(github_token):
         print(repo.name)

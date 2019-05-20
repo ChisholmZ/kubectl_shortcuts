@@ -11,6 +11,15 @@ def get_services():
 def get_repos(github_token):
     return Github(github_token).search_repositories(query='telematics hub user:schneidertech')
 
+# get jobs
+def get_jobs(github_token):
+    services = get_services()
+    for repo in get_repos(github_token):
+        service = repo.name.replace('telematics-hub-','')
+        if service not in services:
+            services.update({service: service})
+    return services
+
 # create dictionary for yaml
 def build_yaml(args, github_token):
     services = get_services()
