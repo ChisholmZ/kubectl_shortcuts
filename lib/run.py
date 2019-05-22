@@ -2,6 +2,10 @@ import yaml, io, os, requests, sys, time
 from datetime import datetime
 
 def run(args, jenkins_url):
+    if not os.path.isfile(args.yaml):
+        print("file doesn't exist")
+        return
+
     ## read in yaml
     with io.open(args.yaml, 'r') as stream:
         data_loaded = yaml.safe_load(stream)

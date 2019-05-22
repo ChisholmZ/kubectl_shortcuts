@@ -21,7 +21,7 @@ class Jobs():
 
     def update_jobs(self):
         for job in self.get_jobs():
-            if re.match(r'^hudson\.model', job['_class']) && job['name'] != 'telhub_devops':
+            if re.match(r'^hudson\.model', job['_class']) and job['name'] != 'telhub_devops':
                 print(job['name'])
                 xml = self.update_xml(job['name'])
                 self.server.reconfig_job(job['name'], xml)
