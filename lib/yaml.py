@@ -1,11 +1,6 @@
 from github import Github
 import oyaml as yaml, json, io, os, subprocess, sys, re
-
-# get services from json to fix names of repos
-def get_services():
-    with open(os.path.join(sys.path[0],'lib','telhub.json')) as file:
-        services = json.loads(file.read())
-    return services
+from lib.helper import *
 
 # get repos from github api
 def get_repos(github_token):
