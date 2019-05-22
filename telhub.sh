@@ -8,6 +8,7 @@ SKIP[rabbit]='rabbit'
 SKIP[telhub-db]='telhub-db'
 SKIP[alpine-sqs]='alpine-sqs'
 SKIP[elasticmq]='elasticmq'
+SKIP[jenkins]='jenkins'
 SKIP[messages-router]='router'
 
 declare -A REPO_SERVICE
@@ -43,6 +44,7 @@ REPO_SERVICE[critical-event-xml-service]='critical-event-xml-service'
 REPO_SERVICE[vehicle-faults-xml-service]='vehicle-faults-xml-service'
 REPO_SERVICE[performace-monitor-xml-service]='performace-monitor-xml-service'
 REPO_SERVICE[geofence-api]='geofence-api'
+REPO_SERVICE[jenkins]='jenkins'
 
 getDir(){
     FULL=$(pwd)
