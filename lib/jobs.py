@@ -1,4 +1,4 @@
-import requests, re, jenkins
+import requests, re, jenkins, inquirer
 from lib.helper import *
 
 class Jobs():
@@ -10,8 +10,25 @@ class Jobs():
         xml = self.update_xml(job)
         self.server.create_job(job, xml)
 
+    def build(self, job):
+        self.server.build_job(job)
+
     def get_jobs(self):
         return self.server.get_jobs(folder_depth=0)
+
+    def select_job(self):
+        choices = []
+        for job in self.get_jobs():
+            choices.update(job['name'])
+
+        jobs = [
+            inquirer.List('job',
+                          message="Which job",
+                          choices=choices,
+                      ),
+        ]
+
+        return inquirer.prompt(jobs)
 
     def update_xml(self, job):
         service = get_service(job)

@@ -35,7 +35,7 @@ elif args.update:
 elif args.release:
     create_yaml(args, github_token)
 elif args.deploy:
-    choose_jobs(get_jobs(github_token))
+    print(jobs.select_job())
 elif args.github:
     for repo in get_repos(github_token):
         print(repo.name)

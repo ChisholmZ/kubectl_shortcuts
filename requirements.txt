@@ -3,3 +3,4 @@ PyGithub
 requests
 Flask
 python-jenkins
+inquirer
