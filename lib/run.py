@@ -13,7 +13,7 @@ def run(args, jobs):
     for job, params in data_loaded['jobs'].items():
         params.update({'token' : job})
         if not args.test:
-            jobs.build(job, params)
+            jobs.build_job(job, params)
         print(job, params, datetime.now(), '\n', sep='\n')
         time.sleep(params.get('wait') or args.seconds)
 
