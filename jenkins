@@ -11,7 +11,8 @@ sys.stdout = Unbuffered(sys.stdout)
 parser = argparse.ArgumentParser()
 parser.add_argument('--context', '-C', help='Context', type=str, default='Dev')
 parser.add_argument('--job', '-J', help='Create Jenkins Job', type=str, default=None)
-parser.add_argument('--update_job', '-u', help='Create Jenkins Job', type=str, default=None)
+parser.add_argument('--update_job', '-u', help='Update Jenkins Job', type=str, default=None)
+parser.add_argument('--build_job', '-B', help='Build Jenkins Job', type=str, default=None)
 parser.add_argument('--get_jobs', '-G', help='Get Jenkins Jobs', action='store_true')
 parser.add_argument('--update', '-U', help='Update Jenkins Jobs', action='store_true')
 parser.add_argument('--deploy', '-D', help='Run Jenkins Job', action='store_true')
@@ -33,6 +34,8 @@ elif args.get_jobs:
     print(jobs.get_jobs())
 elif args.update_job:
     jobs.update_job(args.update_job)
+elif args.build_job:
+    jobs.build_job(args.build_job)
 elif args.update:
     jobs.update_jobs()
 elif args.save:

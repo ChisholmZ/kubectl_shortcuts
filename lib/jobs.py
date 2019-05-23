@@ -16,7 +16,7 @@ class Jobs():
         self.server.create_job(job, xml)
 
     # build jenkins job
-    def build(self, job, params = {}):
+    def build_job(self, job, params = {}):
         self.server.build_job(job, params)
 
     # get jenkins jobs
