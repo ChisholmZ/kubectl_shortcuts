@@ -1,5 +1,7 @@
-jenkins_user=''
-jenkins_token=''
-jenkins_domain=''
+jenkins = {
+    'user' : ''
+    'token' : ''
+    'domain' : ''
+}
 
 github_token=''

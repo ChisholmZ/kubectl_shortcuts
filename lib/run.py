@@ -1,10 +1,9 @@
-import yaml, io, os, requests, sys, time
+import yaml, io, os, sys, time
 from datetime import datetime
 
-def run(args, jenkins_url):
+def run(args, jobs):
     if not os.path.isfile(args.yaml):
-        print("file doesn't exist")
-        return
+        return "file doesn't exist"
 
     ## read in yaml
     with io.open(args.yaml, 'r') as stream:
@@ -12,12 +11,10 @@ def run(args, jenkins_url):
 
     ## send jobs
     for job, params in data_loaded['jobs'].items():
-        build = 'buildWithParameters' if job == 'telhub_devops' or args.context != 'Dev' else 'build'
-        url = 'http://%s/job/TelematicsHub-%s/job/%s/%s' % (jenkins_url, args.context, job, build)
         params.update({'token' : job})
-        if args.test :
-            print(job, url, params, datetime.now(), '\n', sep='\n')
-        else:
-            response = requests.post(url, params)
-            print(job, params, response, datetime.now(), '\n', sep='\n')
+        if not args.test:
+            jobs.build(job, params)
+        print(job, params, datetime.now(), '\n', sep='\n')
         time.sleep(params.get('wait') or args.seconds)
+
+    return 'done'

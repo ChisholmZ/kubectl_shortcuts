@@ -1,34 +1,21 @@
-import requests, re, jenkins, inquirer
+import requests, re, jenkins
 from lib.helper import *
 
 class Jobs():
-    def __init__(self, jenkins_user, jenkins_token, jenkins_domain, context):
-        self.server = jenkins.Jenkins('http://%s/job/TelematicsHub-%s' % (jenkins_domain, context), username=jenkins_user, password=jenkins_token)
+    def __init__(self, jenkins, context):
+        url = 'http://%s/job/TelematicsHub-%s' % (jenkins['domain'], context)
+        self.server = jenkins.Jenkins(url, username=jenkins['user'], password=jenkins['token'])
 
     #create jenkins job base on existing job
     def create_job(self, job):
         xml = self.update_xml(job)
         self.server.create_job(job, xml)
 
-    def build(self, job):
-        self.server.build_job(job)
+    def build(self, job, params = {}):
+        self.server.build_job(job, params)
 
     def get_jobs(self):
         return self.server.get_jobs(folder_depth=0)
-
-    def select_job(self):
-        choices = []
-        for job in self.get_jobs():
-            choices.update(job['name'])
-
-        jobs = [
-            inquirer.List('job',
-                          message="Which job",
-                          choices=choices,
-                      ),
-        ]
-
-        return inquirer.prompt(jobs)
 
     def update_xml(self, job):
         service = get_service(job)
@@ -42,3 +29,17 @@ class Jobs():
                 print(job['name'])
                 xml = self.update_xml(job['name'])
                 self.server.reconfig_job(job['name'], xml)
+
+    # def select_job(self):
+    #     choices = []
+    #     for job in self.get_jobs():
+    #         choices.update(job['name'])
+    #
+    #     jobs = [
+    #         inquirer.List('job',
+    #                       message="Which job",
+    #                       choices=choices,
+    #                   ),
+    #     ]
+    #
+    #     return inquirer.prompt(jobs)

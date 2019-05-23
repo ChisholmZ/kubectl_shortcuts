@@ -16,18 +16,17 @@ parser.add_argument('--update', '-U', help='Update Jenkins Jobs', action='store_
 parser.add_argument('--deploy', '-D', help='Run Jenkins Job', action='store_true')
 parser.add_argument('--release', '-R', help='Create Release yaml', type=str, default=None)
 parser.add_argument('--test', '-T', help='Test', action='store_true')
-parser.add_argument('--github', '-H', help='Test', action='store_true')
-parser.add_argument('--run', '-r', help='Test', action='store_true')
+parser.add_argument('--github', '-H', help='Get github repos', action='store_true')
+parser.add_argument('--run', '-r', help='Run the deployments', action='store_true')
 parser.add_argument('--seconds', '-S', help='Seconds between jobs', type=int, default=120)
 parser.add_argument('--yaml', '-Y', help='yaml file to read', type=str, default="%s/jenkins.yaml" % sys.path[0])
 args = parser.parse_args()
 
-## set Jenkins url from config
-jenkins_url="%s:%s@%s" % (jenkins_user, jenkins_token, jenkins_domain)
-jobs = Jobs(jenkins_user, jenkins_token, jenkins_domain, args.context)
+## set Jenkins from config
+jobs = Jobs(jenkins, args.context)
 
 if args.job:
-    jobs.create_job(args, jenkins_url)
+    jobs.create_job(args.job)
 elif args.get_jobs:
     print(jobs.get_jobs())
 elif args.update:
@@ -40,4 +39,4 @@ elif args.github:
     for repo in get_repos(github_token):
         print(repo.name)
 elif args.run:
-    run(args, jenkins_url)
+    print(run(args, jobs))
