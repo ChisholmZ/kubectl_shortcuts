@@ -11,6 +11,7 @@ sys.stdout = Unbuffered(sys.stdout)
 parser = argparse.ArgumentParser()
 parser.add_argument('--context', '-C', help='Context', type=str, default='Dev')
 parser.add_argument('--job', '-J', help='Create Jenkins Job', type=str, default=None)
+parser.add_argument('--update_job', '-u', help='Create Jenkins Job', type=str, default=None)
 parser.add_argument('--get_jobs', '-G', help='Get Jenkins Jobs', action='store_true')
 parser.add_argument('--update', '-U', help='Update Jenkins Jobs', action='store_true')
 parser.add_argument('--deploy', '-D', help='Run Jenkins Job', action='store_true')
@@ -18,19 +19,24 @@ parser.add_argument('--release', '-R', help='Create Release yaml', type=str, def
 parser.add_argument('--test', '-T', help='Test', action='store_true')
 parser.add_argument('--github', '-H', help='Get github repos', action='store_true')
 parser.add_argument('--run', '-r', help='Run the deployments', action='store_true')
+parser.add_argument('--save', '-V', help='Save Config File', action='store_true')
 parser.add_argument('--seconds', '-S', help='Seconds between jobs', type=int, default=120)
 parser.add_argument('--yaml', '-Y', help='yaml file to read', type=str, default="%s/jenkins.yaml" % sys.path[0])
 args = parser.parse_args()
 
 ## set Jenkins from config
-jobs = Jobs(jenkins, args.context)
+jobs = Jobs(jenkins_config, args.context)
 
 if args.job:
     jobs.create_job(args.job)
 elif args.get_jobs:
     print(jobs.get_jobs())
+elif args.update_job:
+    jobs.update_job(args.update_job)
 elif args.update:
     jobs.update_jobs()
+elif args.save:
+    jobs.save_config()
 elif args.release:
     create_yaml(args, github_token)
 elif args.deploy:
