@@ -49,16 +49,11 @@ class Jobs():
         path = os.path.join(sys.path[0],'files','job_%s.xml' % self.context.lower())
         open(path, 'w').write(xml)
 
-    # def select_job(self):
-    #     choices = []
-    #     for job in self.get_jobs():
-    #         choices.update(job['name'])
-    #
-    #     jobs = [
-    #         inquirer.List('job',
-    #                       message="Which job",
-    #                       choices=choices,
-    #                   ),
-    #     ]
-    #
-    #     return inquirer.prompt(jobs)
+    def select_job(self):
+        print('TODO:')
+        # choices = {}
+        # for job in self.get_jobs():
+        #     choices.update(job['name'])
+        #
+        # answers = whaaaaat.prompt(questions)
+        # whaaaaat.print_json(answers)

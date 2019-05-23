@@ -34,7 +34,7 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <authToken>telhub-#SERVICE#</authToken>
+  <authToken>telhub-#JOB#</authToken>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>

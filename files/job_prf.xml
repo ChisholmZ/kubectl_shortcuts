@@ -36,7 +36,7 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <authToken>telhub-ps-heartbeat-adapter</authToken>
+  <authToken>telhub-#JOB#</authToken>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
