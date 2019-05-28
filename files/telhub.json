@@ -10,7 +10,7 @@
       "ps-performance-monitor-adapter": "performance-monitor-ps-adapter",
       "inbound-message-vehicle-maintenance-fault-adapter": "vehicle-fault-ps-adapter",
       "hos-timers-api": "hos-timer-api",
-      "ps-hos-events-adapter": "hos-timer-ps-adapter",
+      "ps-hos-events-adapter": "hos-events-ps-adapter",
       "ps-device-adapter": "device-update-ps-adapter",
       "ps-driver-parameter-group-adapter": "driver-parm-update-ps-adapter",
       "ps-equipment-adapter": "equipment-update-ps-adapter",
@@ -18,5 +18,9 @@
   },
   "repos": {
 
+  },
+  "jobs": {
+    "driver-update-ps-adapter": "driver-update",
+    "driver-parm-update-ps-adapter": "driver-parm-update"
   }
 }

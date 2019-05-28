@@ -19,10 +19,13 @@ def get_services():
 def get_repos():
     return get_json()['repos']
 
-def get_repo(job):
-    job = re.sub(r'(telematics-hub|telhub)[-_]', '', job)
-    repos = get_repos()
-    return repos[job] if job in repos.keys() else get_service_from_job(job)
+def get_jobs():
+    return get_json()['jobs']
+
+def get_job(service):
+    job = re.sub(r'(telematics-hub|telhub)[-_]', '', service)
+    jobs = get_jobs()
+    return jobs[job] if job in jobs.keys() else job
 
 def get_service(service):
     service = re.sub(r'(telematics-hub|telhub)[-_]', '', service)

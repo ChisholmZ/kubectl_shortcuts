@@ -25,7 +25,7 @@ def build_yaml(args, github_token):
             continue
         sep = '_' if re.match(r'devops|migrations', service) else '-'
         service = services[service] if service in services.keys() else service
-        job = "telhub%s%s" % (sep, service)
+        job = "telhub%s%s" % (sep, get_job(service))
         dict = {job: {'commit': repo.get_branch('master').commit.sha, 'branch': args.release}}
         if service == 'devops':
             devops = dict
