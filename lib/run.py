@@ -11,10 +11,10 @@ def run(args, jobs):
 
     ## send jobs
     for job, params in data_loaded['jobs'].items():
-        params.update({'token' : job})
         if not args.test:
             jobs.build_job(job, params)
         print(job, params, datetime.now(), '\n', sep='\n')
-        time.sleep(params.get('wait') or args.seconds)
+        seconds = params.get('wait') if params else args.seconds
+        time.sleep(seconds)
 
     return 'done'
