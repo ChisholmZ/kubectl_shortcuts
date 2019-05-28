@@ -4,6 +4,9 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="{{ url_for('static', filename='main.js') }}"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<style>
+    [v-cloak] { display: none; }
+</style>
 </head>
 <body>
 
@@ -13,7 +16,7 @@
 
     <main role="main" class="container">
         {% raw %}
-        <div id="repo" class="mt-4">
+        <div id="repo" class="mt-4" v-cloak>
           <template>
             <input type="text"
               :id="release"
@@ -23,6 +26,9 @@
           </template>
           <table class="table table-stripped">
               <tr>
+                  <th>
+
+                  </th>
                   <th>
                       repo
                   </th>
@@ -34,6 +40,9 @@
                   </th>
               </tr>
             <tr v-for="(record, repo) in repos">
+              <td>
+                  <input type="checkbox" name="service" :key="repo" :value="repo" />
+              </td>
               <td>
                  {{ repo }}
               </td>

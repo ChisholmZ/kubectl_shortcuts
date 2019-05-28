@@ -1,4 +1,4 @@
-jenkins = {
+jenkins_config = {
     'user' : ''
     'token' : ''
     'domain' : ''
