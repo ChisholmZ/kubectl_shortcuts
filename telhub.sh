@@ -10,6 +10,7 @@ SKIP[alpine-sqs]='alpine-sqs'
 SKIP[elasticmq]='elasticmq'
 SKIP[jenkins]='jenkins'
 SKIP[messages-router]='router'
+SKIP[orion]='orion'
 
 declare -A REPO_SERVICE
 REPO_SERVICE[common-package]='common-package'
@@ -45,6 +46,7 @@ REPO_SERVICE[vehicle-faults-xml-service]='vehicle-faults-xml-service'
 REPO_SERVICE[performace-monitor-xml-service]='performace-monitor-xml-service'
 REPO_SERVICE[geofence-api]='geofence-api'
 REPO_SERVICE[jenkins]='jenkins'
+REPO_SERVICE[orion]='orion'
 
 getDir(){
     FULL=$(pwd)

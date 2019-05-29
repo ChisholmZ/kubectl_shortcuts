@@ -141,10 +141,10 @@ fi
 
 kubectl config use-context $CONTEXT
 
-RELEASE_NAME_LISTING=$(helm ls ${HELM_DEPLOYMENT_NAME} --namespace ${NAMESPACE} --deployed)
+RELEASE_NAME_LISTING=$(helm ls ${HELM_DEPLOYMENT_NAME} --namespace ${NAMESPACE} --deployed | grep "${HELM_DEPLOYMENT_NAME} ")
 
 ## Check if Helm is installed otherwise upgrade
-if [[ $RELEASE_NAME_LISTING == *"${HELM_DEPLOYMENT_NAME}"*"${NAMESPACE}"* ]]
+if [[ $RELEASE_NAME_LISTING == *"${HELM_DEPLOYMENT_NAME}"* ]]
 then
 	helm upgrade --namespace ${NAMESPACE} ${HELM_DEPLOYMENT_NAME} "${CHARTS}/${SERVICE_NAME}" \
     --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH} \
