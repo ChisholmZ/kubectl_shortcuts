@@ -11,10 +11,11 @@ def run(args, jobs):
 
     ## send jobs
     for job, params in data_loaded['jobs'].items():
+        params = None if args.context == 'Dev' and job != 'telhub_devops' else params
         if not args.test:
             jobs.build_job(job, params)
         print(job, params, datetime.now(), '\n', sep='\n')
-        seconds = params.get('wait') if params else args.seconds
+        seconds = params.get('wait') if params and params.get('wait') else args.seconds
         time.sleep(seconds)
 
     return 'done'
