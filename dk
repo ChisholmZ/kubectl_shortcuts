@@ -9,6 +9,11 @@ DIR=$(getDir)
 CON=$(docker ps -aqf "ancestor=${DIR}")
 PORT=4000
 
+# if [ -z "$CON" ]; then
+#     echo $CON
+#     exit
+# fi
+
 if [ ! -z "$2" ] && [[ "$2" =~ ^[0-9]+$ ]]; then
     PORT=$2
 elif [ ! -z "$3" ] && [[ "$2" =~ ^[0-9]+$ ]]; then
@@ -29,7 +34,7 @@ if [ "$1" == 'build' ]; then
     $DOCKER build --tag=${DIR} .
 elif [ "$1" == 'r' ] || [ "$1" == 'run' ]; then
     $DOCKER run -d -p $PORT:80 ${DIR}
-elif [ "$1" == 'l' ] || [ "$1" == 'logs' ]; then
+elif [ "$1" == 'logs' ]; then
     $DOCKER logs ${CON}
 elif [ "$1" == 'pull' ]; then
     docker pull ${DIR}:latest
@@ -53,6 +58,10 @@ elif [ "$1" == 'killall' ]; then
     docker kill $(docker ps -q)
 elif [ "$1" == 'rmi' ]; then
     docker rmi -f $(docker ps -aqf "ancestor=${DIR}")
+elif [ "$1" == 'l' ]; then
+    kubectl logs $POD
+elif [ "$1" == 'flog' ]; then
+    kubectl logs -f $POD
 elif [ "$1" == 'd' ]; then
     kubectl describe pod $POD
 elif [ "$1" == 'dd' ]; then

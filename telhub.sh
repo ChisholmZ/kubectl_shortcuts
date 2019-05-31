@@ -46,6 +46,7 @@ REPO_SERVICE[vehicle-faults-xml-service]='vehicle-faults-xml-service'
 REPO_SERVICE[performace-monitor-xml-service]='performace-monitor-xml-service'
 REPO_SERVICE[geofence-api]='geofence-api'
 REPO_SERVICE[jenkins]='jenkins'
+REPO_SERVICE[geofence-migration-service]='geofence-migration-service'
 REPO_SERVICE[orion]='orion'
 
 getDir(){
