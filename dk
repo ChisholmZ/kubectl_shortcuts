@@ -36,6 +36,8 @@ elif [ "$1" == 'r' ] || [ "$1" == 'run' ]; then
     $DOCKER run -d -p $PORT:80 ${DIR}
 elif [ "$1" == 'logs' ]; then
     $DOCKER logs ${CON}
+elif [ "$1" == 'info' ]; then
+    echo ${CON} ${SERVICE_NAME} ${POD}
 elif [ "$1" == 'pull' ]; then
     docker pull ${DIR}:latest
 elif [ "$1" == 'b' ] || [ -z "$1" ]; then
