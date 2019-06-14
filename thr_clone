@@ -22,6 +22,8 @@ cd $MAIN_DIR
 clone_repo(){
     if [[ $1 =~ 'telhub-db|elasticmq' ]]; then
         git clone git@github.com:ChisholmZ/${1}.git ${1}
+    elif [[ $1 =~ 'rabbitmq' ]]; then
+        git clone git@github.com:schneidertech/telematics-${1}.git ${1}
     else
         git clone git@github.com:schneidertech/telematics-hub-${1}.git ${1}
     fi
