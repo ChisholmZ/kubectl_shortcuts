@@ -41,8 +41,8 @@ def get_service_from_job(job):
     service = [k for k,v in get_services().items() if v == job]
     return service[0] if len(service) else job
 
-# get jobs
-def get_jobs(github_token):
+# github jobs
+def git_jobs(github_token):
     services = get_services()
     for repo in git_repos(github_token):
         service = repo.name.replace('telematics-hub-','')
