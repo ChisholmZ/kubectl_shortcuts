@@ -46,6 +46,16 @@ do
        skip-rmi)
            NO_RMI=true;
            ;;
+       skip-docker)
+           NO_DOCKER=true;
+           ;;
+       skip)
+           NO_JAVA=true;
+           DOS=false;
+           NO_COMPOSER=true;
+           NO_RMI=true;
+           NO_DOCKER=true;
+           ;;
        clean-java)
            CLEAN_JAVA=true;
            ;;
@@ -107,8 +117,10 @@ if [ -d php ]; then
     rm -rf php
 fi
 
-sed -i 's/RUN composer update -o/#RUN composer update -o/g' Dockerfile
-sed -i 's/RUN cd \$HOME \&\& composer update -o/#RUN cd \$HOME \&\& composer update -o/g' Dockerfile
+if [ -z "$NO_DOCKER" ]; then
+    sed -i 's/RUN composer update -o/#RUN composer update -o/g' Dockerfile
+    sed -i 's/RUN cd \$HOME \&\& composer update -o/#RUN cd \$HOME \&\& composer update -o/g' Dockerfile
+fi
 
 # Remove previous Docker images just in case children dependencies exist on running container
 RMI=$(docker images -f dangling=true -q --no-trunc)
@@ -157,9 +169,10 @@ fi
 
 funcHandleReturnCode $? "Helm"
 
-
-sed -i 's/#RUN composer update -o/RUN composer update -o/g' Dockerfile
-sed -i 's/#RUN cd \$HOME \&\& composer update -o/RUN cd \$HOME \&\& composer update -o/g' Dockerfile
+if [ -z "$NO_DOCKER" ]; then
+    sed -i 's/#RUN composer update -o/RUN composer update -o/g' Dockerfile
+    sed -i 's/#RUN cd \$HOME \&\& composer update -o/RUN cd \$HOME \&\& composer update -o/g' Dockerfile
+fi
 
 if [ $DOS == true ]; then
     branch=$(git rev-parse --abbrev-ref HEAD)

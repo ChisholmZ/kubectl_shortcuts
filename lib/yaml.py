@@ -30,6 +30,7 @@ def build_yaml(args, github_token):
     migrations = {}
     router = {}
     inbound = {}
+    job = ''
 
     for repo in get_repos(github_token):
         if not get_branch(repo, args.release):
