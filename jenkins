@@ -25,6 +25,8 @@ parser.add_argument('--seconds', '-S', help='Seconds between jobs', type=int, de
 parser.add_argument('--yaml', '-Y', help='yaml file to read', type=str, default="%s/jenkins.yaml" % sys.path[0])
 args = parser.parse_args()
 
+if not re.match(r'Release_', args.release): args.release = 'Release_%s' % args.release
+
 ## set Jenkins from config
 jobs = Jobs(jenkins_config, args.context)
 

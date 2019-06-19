@@ -30,7 +30,6 @@ def build_yaml(args, github_token):
     migrations = {}
     router = {}
     inbound = {}
-    job = ''
 
     for repo in get_repos(github_token):
         if not get_branch(repo, args.release):
@@ -57,7 +56,9 @@ def build_yaml(args, github_token):
         else:
             yaml.update(dict)
 
-    yaml[job].update({'wait': 1})
+    if job:
+        yaml[job].update({'wait': 1})
+
     return {'jobs': {**devops, **migrations, **router, **inbound, **yaml}}
 
 # build the yaml for jenkins to deploy from
