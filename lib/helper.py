@@ -1,5 +1,9 @@
 from github import Github
-import oyaml as yaml, json, io, os, subprocess, sys, re
+import oyaml as yaml, json, io, os, subprocess, sys, re, webbrowser
+
+# get repos from github api
+def git_repos(github_token):
+    return Github(github_token).search_repositories(query='telematics hub user:schneidertech')
 
 def choose_jobs(jobs):
     for job in jobs:
@@ -36,3 +40,27 @@ def get_service_from_job(job):
     job = re.sub(r'(telematics-hub|telhub)[-_]', '', job)
     service = [k for k,v in get_services().items() if v == job]
     return service[0] if len(service) else job
+
+# get jobs
+def get_jobs(github_token):
+    services = get_services()
+    for repo in git_repos(github_token):
+        service = repo.name.replace('telematics-hub-','')
+        if service not in services:
+            services.update({service: service})
+    return services
+
+# loop through branchs to see if it exists
+def get_branch(repo, release):
+    for branch in repo.get_branches():
+        if release == branch.name:
+            return True
+    return False
+
+def pull_request(args, github_token):
+    for repo in git_repos(github_token):
+        if get_branch(repo, args.release):
+            pull_to = args.pull if args.pull == 'master' else args.release
+            pull_from = args.release if args.pull == 'master' else args.pull
+            url = "%s/compare/%s...%s" % (repo.html_url, pull_to, pull_from)
+            webbrowser.open_new_tab(url)

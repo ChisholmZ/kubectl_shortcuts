@@ -1,26 +1,6 @@
-from github import Github
+# from github import Github
 import oyaml as yaml, json, io, os, subprocess, sys, re
 from lib.helper import *
-
-# get repos from github api
-def get_repos(github_token):
-    return Github(github_token).search_repositories(query='telematics hub user:schneidertech')
-
-# get jobs
-def get_jobs(github_token):
-    services = get_services()
-    for repo in get_repos(github_token):
-        service = repo.name.replace('telematics-hub-','')
-        if service not in services:
-            services.update({service: service})
-    return services
-
-# loop through branchs to see if it exists
-def get_branch(repo, release):
-    for branch in repo.get_branches():
-        if release == branch.name:
-            return True
-    return False
 
 # create dictionary for yaml
 def build_yaml(args, github_token):
@@ -31,7 +11,7 @@ def build_yaml(args, github_token):
     router = {}
     inbound = {}
 
-    for repo in get_repos(github_token):
+    for repo in git_repos(github_token):
         if not get_branch(repo, args.release):
             continue
 
