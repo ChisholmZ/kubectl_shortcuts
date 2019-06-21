@@ -10,6 +10,7 @@ sys.stdout = Unbuffered(sys.stdout)
 ## parse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--context', '-C', help='Context', type=str, default='Dev')
+parser.add_argument('--branch', '-b', help='Context', type=str, default='master')
 parser.add_argument('--job', '-J', help='Create Jenkins Job', type=str, default=None)
 parser.add_argument('--update_job', '-u', help='Update Jenkins Job', type=str, default=None)
 parser.add_argument('--build_job', '-B', help='Build Jenkins Job', type=str, default=None)
