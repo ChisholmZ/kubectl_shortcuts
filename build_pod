@@ -159,12 +159,12 @@ RELEASE_NAME_LISTING=$(helm ls ${HELM_DEPLOYMENT_NAME} --namespace ${NAMESPACE} 
 if [[ $RELEASE_NAME_LISTING == *"${HELM_DEPLOYMENT_NAME}"* ]]
 then
 	helm upgrade --namespace ${NAMESPACE} ${HELM_DEPLOYMENT_NAME} "${CHARTS}/${SERVICE_NAME}" \
-    --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH} \
+    --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH},autoscale.minpods=1 \
     --recreate-pods
 else
 	helm install --namespace ${NAMESPACE} "${CHARTS}/${SERVICE_NAME}" \
     --name=${HELM_DEPLOYMENT_NAME} \
-    --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH}
+    --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH},autoscale.minpods=1
 fi
 
 funcHandleReturnCode $? "Helm"
