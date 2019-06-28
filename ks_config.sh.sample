@@ -21,8 +21,8 @@ DOS=true
 
 # select list for context
 declare -A CONTEXTS
-CONTEXTS[d]='dev-telhub'
-CONTEXTS[u]='uat-telhub'
-CONTEXTS[f]='prf-telhub'
-CONTEXTS[d]='prd-telhub'
+CONTEXTS[dev]='dev-telhub'
+CONTEXTS[uat]='uat-telhub'
+CONTEXTS[prf]='prf-telhub'
+CONTEXTS[prd]='prd-telhub'
 CONTEXTS[l]="$CONTEXT"

@@ -14,5 +14,5 @@ if [ $CREATE_REPLACE == 'create' ]; then
     kubectl config set-context $CONTEXT --user=docker-for-desktop --namespace=$NAMESPACE --cluster=docker-for-desktop-cluster
 fi
 
-kubectl $CREATE_REPLACE -f "${DEVOPS}/${NAMESPACE}/secrets/secrets.yaml"
-kubectl $CREATE_REPLACE -f "${DEVOPS}/${NAMESPACE}/configs/config.yaml"
+kubectl $CREATE_REPLACE -f "${DEVOPS}/${NAMESPACE}/secrets/"
+kubectl $CREATE_REPLACE -f "${DEVOPS}/${NAMESPACE}/configs/"

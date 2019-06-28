@@ -48,6 +48,7 @@ REPO_SERVICE[geofence-api]='geofence-api'
 REPO_SERVICE[jenkins]='jenkins'
 REPO_SERVICE[geofence-migration-service]='geofence-migration-service'
 REPO_SERVICE[orion]='orion'
+REPO_SERVICE[schneider-forms-service-dev-ops]='schneider-forms-service'
 
 getDir(){
     FULL=$(pwd)
