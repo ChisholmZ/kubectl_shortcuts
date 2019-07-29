@@ -142,7 +142,8 @@ echo "NAMESPACE $NAMESPACE";
 echo "HELM_DEPLOYMENT_NAME $HELM_DEPLOYMENT_NAME";
 
 if [ -z "$NO_BUILD" ]; then
-    $DOCKER build -t ${DIR}:latest .
+    COMPOSER_AUTH=$(kubectl describe configmaps | grep github)
+    $DOCKER build -t ${DIR}:latest --build-arg COMPOSER_AUTH="${COMPOSER_AUTH}" .
     funcHandleReturnCode $? "Build Docker image"
 
     $DOCKER tag ${DIR}:latest $SERVICE_NAME:latest
