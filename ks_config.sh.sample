@@ -14,6 +14,10 @@ CHARTS=${DEVOPS}/helm-charts
 NAMESPACE='local'
 # local docker context
 CONTEXT='local'
+# local k8 user
+KUBEUSR='docker-for-desktop'
+# local k8 cluster
+CLUSTER='docker-for-desktop-cluster'
 # if windows use the following else remove winpty
 DOCKER='winpty docker'
 # if windows will convert files with dos2unix / else set false

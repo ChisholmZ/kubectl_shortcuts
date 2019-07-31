@@ -11,7 +11,7 @@ fi
 
 if [ $CREATE_REPLACE == 'create' ]; then
     kubectl create namespace $NAMESPACE
-    kubectl config set-context $CONTEXT --user=docker-for-desktop --namespace=$NAMESPACE --cluster=docker-for-desktop-cluster
+    kubectl config set-context $CONTEXT --user=$KUBEUSR --namespace=$NAMESPACE --cluster=$CLUSTER
 fi
 
 kubectl $CREATE_REPLACE -f "${DEVOPS}/${NAMESPACE}/secrets/"
