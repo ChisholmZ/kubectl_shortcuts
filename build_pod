@@ -71,6 +71,9 @@ do
        pull-policy=*)
            PULL_POLICY="${arg:12}";
            ;;
+       charts=*)
+           CHARTS="${arg:7}";
+           ;;
     esac
     shift
 done
