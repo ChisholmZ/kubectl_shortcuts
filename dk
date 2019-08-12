@@ -74,4 +74,7 @@ elif [ "$1" == 'delete' ]; then
     kubectl delete pod $POD --force --grace-period=0
 elif [ "$1" == 'dos' ]; then
     find . -type f -print0 | xargs -0 dos2unix
+elif [ "$1" == 'host' ]; then
+    IP=$(kubectl get service | grep $SERVICE_NAME | awk '{print $4}')
+    echo $IP ${SERVICE_NAME}.k8 >> $HOST_FILE
 fi
