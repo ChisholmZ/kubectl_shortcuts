@@ -74,6 +74,9 @@ do
        charts=*)
            CHARTS="${arg:7}";
            ;;
+       chart=*)
+           CHART_NAME="${arg:6}";
+           ;;
     esac
     shift
 done
@@ -83,6 +86,7 @@ if [ $DOS == true ]; then
     dos2unix *.sh
     dos2unix *.json
     dos2unix *.conf
+    dos2unix *.config
     dos2unix tmpfiles/*
     dos2unix vol1/*
 fi
@@ -95,6 +99,10 @@ DIR=$(echo $DIR | sed "s/telematics-hub-//g")
 
 if [ -z "$SERVICE_NAME" ]; then
     SERVICE_NAME=${REPO_SERVICE[$DIR]}
+fi
+
+if [ -z "$CHART_NAME" ]; then
+    CHART_NAME=${SERVICE_NAME}
 fi
 
 if [ -f pom.xml ] && [ ! -z "$CLEAN_JAVA" ]; then
@@ -162,13 +170,13 @@ RELEASE_NAME_LISTING=$(helm ls ${HELM_DEPLOYMENT_NAME} --namespace ${NAMESPACE} 
 ## Check if Helm is installed otherwise upgrade
 if [[ $RELEASE_NAME_LISTING == *"${HELM_DEPLOYMENT_NAME}"* ]]
 then
-	helm upgrade --namespace ${NAMESPACE} ${HELM_DEPLOYMENT_NAME} "${CHARTS}/${SERVICE_NAME}" \
-    --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH},autoscale.minReplicas=1 \
+	helm upgrade --namespace ${NAMESPACE} ${HELM_DEPLOYMENT_NAME} "${CHARTS}/${CHART_NAME}" \
+    --set serviceName=${SERVICE_NAME},image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH},autoscale.minReplicas=1 \
     --recreate-pods
 else
-	helm install --namespace ${NAMESPACE} "${CHARTS}/${SERVICE_NAME}" \
+	helm install --namespace ${NAMESPACE} "${CHARTS}/${CHART_NAME}" \
     --name=${HELM_DEPLOYMENT_NAME} \
-    --set image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH},autoscale.minReplicas=1
+    --set serviceName=${SERVICE_NAME},image.repository=${SERVICE_NAME},image.tag=${DOCKER_TAG},image.pullPolicy=${PULL_POLICY},localPath=${LOCAL_PATH},autoscale.minReplicas=1
 fi
 
 funcHandleReturnCode $? "Helm"
