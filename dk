@@ -75,6 +75,9 @@ elif [ "$1" == 'delete' ]; then
 elif [ "$1" == 'dos' ]; then
     find . -type f -print0 | xargs -0 dos2unix
 elif [ "$1" == 'host' ]; then
+    if [ -z "$SERVICE_NAME"]; then
+        SERVICE_NAME=$DIR
+    fi
     IP=$(kubectl get service | grep $SERVICE_NAME | awk '{print $4}')
     sed "s/^.*${SERVICE_NAME}\.k8//g" $HOST_FILE > /tmp/hosts
     sed -i "/^$/d" /tmp/hosts
