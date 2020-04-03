@@ -20,6 +20,7 @@ KUBEUSR='docker-for-desktop'
 CLUSTER='docker-for-desktop-cluster'
 # if windows use the following else remove winpty
 DOCKER='winpty docker'
+KUBECTL='winpty kubectl'
 # if windows will convert files with dos2unix / else set false
 DOS=true
 
