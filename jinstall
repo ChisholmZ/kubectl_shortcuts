@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ~z
 
 pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements.txt --no-cache
