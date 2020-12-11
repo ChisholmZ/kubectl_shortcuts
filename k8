@@ -41,9 +41,9 @@ do
                 kubectl describe hpa $pod
         elif [ "$1" == "root" ]; then
                 ##requires https://github.com/mikelorant/kubectl-exec-user
-                $KUBECTL plugin exec-user -u 0 $pod bash
+                kubectl plugin exec-user -u 0 $pod bash
         else
-                $KUBECTL exec -it $pod bash;
+                kubectl exec -it $pod bash;
         fi
         exit;
 done
