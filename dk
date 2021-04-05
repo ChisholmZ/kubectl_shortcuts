@@ -6,7 +6,7 @@ source ks_config.sh
 source telhub.sh
 
 DIR=$(getDir)
-CON=$(docker ps -aqf "ancestor=${DIR}")
+CON=$(docker ps -aqlf "ancestor=${DIR}")
 PORT=4000
 
 # if [ -z "$CON" ]; then
@@ -28,59 +28,79 @@ fi
 
 
 SERVICE_NAME=${REPO_SERVICE[$DIR]}
-POD=$(kubectl get pods | grep $SERVICE_NAME | awk '{print $1}')
-
-if [ "$1" == 'build' ]; then
-    $DOCKER build --tag=${DIR} .
-elif [ "$1" == 'r' ] || [ "$1" == 'run' ]; then
-    $DOCKER run -d -p $PORT:80 ${DIR}
-elif [ "$1" == 'logs' ]; then
-    $DOCKER logs ${CON}
-elif [ "$1" == 'info' ]; then
-    echo ${CON} ${SERVICE_NAME} ${POD}
-elif [ "$1" == 'pull' ]; then
-    docker pull ${DIR}:latest
-elif [ "$1" == 'b' ] || [ -z "$1" ]; then
-    $DOCKER exec -it ${CON} //bin/bash
-elif [ "$1" == 'root' ]; then
-    $DOCKER exec -it --user root ${CON} //bin/bash
-elif [ "$1" == 'user' ]; then
-    $DOCKER exec -it --user $2 ${CON} //bin/bash
-elif [ "$1" == 'p' ] || [ "$1" == 'prune' ]; then
-    docker system prune -f -a
-elif [ "$1" == 'ls' ]; then
-    docker container ls -a
-elif [ "$1" == 'i' ]; then
-    docker ps -af "ancestor=${DIR}"
-elif [ "$1" == 'stop' ]; then
-    docker stop $(docker ps -aqf "ancestor=${DIR}")
-elif [ "$1" == 'kill' ]; then
-    docker kill $(docker ps -aqf "ancestor=${DIR}")
-elif [ "$1" == 'killall' ]; then
-    docker kill $(docker ps -q)
-elif [ "$1" == 'rmi' ]; then
-    docker rmi -f $(docker ps -aqf "ancestor=${DIR}")
-elif [ "$1" == 'l' ]; then
-    kubectl logs $POD
-elif [ "$1" == 'flog' ]; then
-    kubectl logs -f $POD
-elif [ "$1" == 'd' ]; then
-    kubectl describe pod $POD
-elif [ "$1" == 'dd' ]; then
-    kubectl describe deployment $SERVICE_NAME
-elif [ "$1" == 'scale' ]; then
-    kubectl scale --replicas=$REPLICAS deployment/$SERVICE_NAME
-elif [ "$1" == 'delete' ]; then
-    kubectl delete pod $POD --force --grace-period=0
-elif [ "$1" == 'dos' ]; then
-    find . -type f -print0 | xargs -0 dos2unix
-elif [ "$1" == 'host' ]; then
-    if [ -z "$SERVICE_NAME"]; then
-        SERVICE_NAME=$DIR
-    fi
-    IP=$(kubectl get service | grep $SERVICE_NAME | awk '{print $4}')
-    sed "s/^.*${SERVICE_NAME}\.k8//g" $HOST_FILE > /tmp/hosts
-    sed -i "/^$/d" /tmp/hosts
-    cat /tmp/hosts > $HOST_FILE
-    echo $IP ${SERVICE_NAME}.k8 >> $HOST_FILE
+if [ ! -z "$SERVICE_NAME"]; then
+    POD=$(kubectl get pods | grep $SERVICE_NAME | awk '{print $1}')
 fi
+
+
+dockOpt(){
+    if [ "$1" == 'r' ]; then
+        CON=$($DOCKER run -d ${DIR})
+    elif [ "$1" == 'rp' ]; then
+        CON=$($DOCKER run -d -p $PORT:80 ${DIR})
+    elif [ "$1" == 'logs' ]; then
+        $DOCKER logs ${CON}
+    elif [ "$1" == 'info' ]; then
+        echo ${CON} ${SERVICE_NAME} ${POD}
+    elif [ "$1" == 'pull' ]; then
+        docker pull ${DIR}:latest
+    elif [ "$1" == 'user' ]; then
+        $DOCKER exec -it --user $2 ${CON} //bin/bash
+    elif [ "$1" == 'p' ] || [ "$1" == 'prune' ]; then
+        docker system prune -f -a
+    elif [ "$1" == 'ls' ]; then
+        docker container ls -a
+    elif [ "$1" == 'i' ]; then
+        docker ps -af "ancestor=${DIR}"
+    elif [ "$1" == 'stop' ]; then
+        docker stop ${CON}
+    elif [ "$1" == 'kill' ]; then
+        docker kill ${CON}
+    elif [ "$1" == 'killall' ]; then
+        docker kill $(docker ps -q)
+    elif [ "$1" == 'rmi' ]; then
+        docker rmi -f $(docker ps -aqf "ancestor=${DIR}")
+    elif [ "$1" == 'l' ]; then
+        kubectl logs $POD
+    elif [ "$1" == 'flog' ]; then
+        kubectl logs -f $POD
+    elif [ "$1" == 'd' ]; then
+        kubectl describe pod $POD
+    elif [ "$1" == 'dd' ]; then
+        kubectl describe deployment $SERVICE_NAME
+    elif [ "$1" == 'scale' ]; then
+        kubectl scale --replicas=$REPLICAS deployment/$SERVICE_NAME
+    elif [ "$1" == 'delete' ]; then
+        kubectl delete pod $POD --force --grace-period=0
+    elif [ "$1" == 'dos' ]; then
+        find . -type f -print0 | xargs -0 dos2unix
+    elif [ "$1" == 'host' ]; then
+        if [ -z "$SERVICE_NAME"]; then
+            SERVICE_NAME=$DIR
+        fi
+        IP=$(kubectl get service | grep $SERVICE_NAME | awk '{print $4}')
+        sed "s/^.*${SERVICE_NAME}\.k8//g" $HOST_FILE > /tmp/hosts
+        sed -i "/^$/d" /tmp/hosts
+        cat /tmp/hosts > $HOST_FILE
+        echo $IP ${SERVICE_NAME}.k8 >> $HOST_FILE
+    fi
+}
+
+bashIn(){
+    if [ -z "$1" ] || [ "$1" == 'u' ]; then
+        $DOCKER exec -it ${CON} //bin/bash
+    elif [ "$1" == 'root' ]; then
+        $DOCKER exec -it --user root ${CON} //bin/bash
+    fi
+}
+
+if [ "$1" == 'build' ] || [ "$1" == 'b' ]; then
+    $DOCKER build --tag=${DIR} .
+    dockOpt "${@:2}"
+    bashIn "${@:3}"
+else 
+    dockOpt "$@"
+    bashIn "$@"
+fi
+
+
