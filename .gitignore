@@ -6,3 +6,4 @@ jenkins.yaml
 jenkins_config.py
 /deployments/*
 !/deployments/jenkins_sample.yaml
+*test*

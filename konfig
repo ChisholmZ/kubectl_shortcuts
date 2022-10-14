@@ -1,0 +1,10 @@
+#!/bin/sh
+# ~z
+
+CLUSTERS=`kubectl config get-clusters`
+
+select CLUSTER in $CLUSTERS
+do
+       kubectl get namespaces | awk '{print $1}' | xargs -I@ bash -c "kubectl config set-context @ --namespace=@ --user=${CLUSTER} --cluster=${CLUSTER}"
+       exit;
+done

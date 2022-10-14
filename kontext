@@ -1,8 +1,8 @@
 #!/bin/sh
 # ~z
 
-k=`kubectl config get-contexts  -o name`
-readarray -t CONTEXTS <<<"$k"
+CONTEXTS=(`kubectl config get-contexts -o name`)
+
 
 if [ ! -z "$1" ]; then
     kubectl config use-context $CONTEXTS[$1]

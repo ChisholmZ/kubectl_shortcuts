@@ -7,18 +7,7 @@ source telhub.sh
 
 DIR=$(getDir)
 CON=$(docker ps -aqlf "ancestor=${DIR}")
-PORT=4000
 
-# if [ -z "$CON" ]; then
-#     echo $CON
-#     exit
-# fi
-
-if [ ! -z "$2" ] && [[ "$2" =~ ^[0-9]+$ ]]; then
-    PORT=$2
-elif [ ! -z "$3" ] && [[ "$2" =~ ^[0-9]+$ ]]; then
-    PORT=$3
-fi
 
 if [ -z "$2" ] && [ "$1" == 'scale' ]; then
     REPLICAS=1
@@ -28,16 +17,16 @@ fi
 
 
 SERVICE_NAME=${REPO_SERVICE[$DIR]}
-if [ ! -z "$SERVICE_NAME"]; then
+if [ ! -z "$SERVICE_NAME" ]; then
     POD=$(kubectl get pods | grep $SERVICE_NAME | awk '{print $1}')
 fi
 
 
 dockOpt(){
     if [ "$1" == 'r' ]; then
-        CON=$($DOCKER run -d ${DIR})
+        CON=$($DOCKER run -d ${DIR} --platform linux/arm64/v8)
     elif [ "$1" == 'rp' ]; then
-        CON=$($DOCKER run -d -p $PORT:80 ${DIR})
+        CON=$($DOCKER run -d ${@:2} ${DIR})
     elif [ "$1" == 'logs' ]; then
         $DOCKER logs ${CON}
     elif [ "$1" == 'info' ]; then
@@ -95,9 +84,11 @@ bashIn(){
 }
 
 if [ "$1" == 'build' ] || [ "$1" == 'b' ]; then
-    $DOCKER build --tag=${DIR} .
-    dockOpt "${@:2}"
-    bashIn "${@:3}"
+    $DOCKER build --tag=${DIR} --platform linux/arm64/v8 .
+    if [ ! -z "$2" ]; then
+        dockOpt "${@:2}"
+        bashIn "${@:3}"
+    fi
 else 
     dockOpt "$@"
     bashIn "$@"
